@@ -13,14 +13,14 @@ interface QuickLink {
 
 // ─── Data ─────────────────────────────────────────────────────────────────────
 const practiceAreas: PracticeArea[] = [
-  { label: "Personal Injury", href: "/practice/personal-injury" },
-  { label: "Medical Malpractice", href: "/practice/medical-malpractice" },
-  { label: "Car Accidents", href: "/practice/car-accidents" },
-  { label: "Workers Compensation", href: "/practice/workers-comp" },
-  { label: "Wrongful Death", href: "/practice/wrongful-death" },
-  { label: "Product Liability", href: "/practice/product-liability" },
-  { label: "Slip & Fall", href: "/practice/slip-fall" },
-  { label: "Brain Injuries", href: "/practice/brain-injuries" },
+  { label: "Personal Injury", href: "#" },
+  { label: "Medical Malpractice", href: "#" },
+  { label: "Car Accidents", href: "#" },
+  { label: "Workers Compensation", href: "#" },
+  { label: "Wrongful Death", href: "#" },
+  { label: "Product Liability", href: "#" },
+  { label: "Slip & Fall", href: "#" },
+  { label: "Brain Injuries", href: "#" },
 ];
 
 const quickLinks: QuickLink[] = [
@@ -144,6 +144,12 @@ export default function Footer() {
           --border:      rgba(201,145,58,0.2);
         }
 
+        /* ── GLOBAL LINK RESET — stops browser default blue/visited colours ── */
+        .footer-root a {
+          color: inherit;
+          text-decoration: none;
+        }
+
         /* ── Ticker ── */
         .ticker-wrap {
           background: var(--teal);
@@ -231,25 +237,28 @@ export default function Footer() {
           flex-shrink: 0;
           flex-wrap: wrap;
         }
+
+        /* ── Buttons — explicit colors so they never inherit wrong value ── */
         .btn-primary {
           display: inline-flex;
           align-items: center;
           gap: 8px;
           padding: 13px 26px;
           background: var(--teal);
-          color: var(--white);
+          color: #ffffff !important;
           font-family: 'Raleway', sans-serif;
           font-size: 12px;
           font-weight: 600;
           letter-spacing: 0.1em;
           text-transform: uppercase;
-          text-decoration: none;
+          text-decoration: none !important;
           border: none;
           cursor: pointer;
           transition: background 0.25s, transform 0.2s;
         }
         .btn-primary:hover {
           background: var(--teal-light);
+          color: #ffffff !important;
           transform: translateY(-1px);
         }
         .btn-outline {
@@ -258,20 +267,20 @@ export default function Footer() {
           gap: 8px;
           padding: 12px 26px;
           background: transparent;
-          color: var(--teal);
+          color: var(--teal) !important;
           font-family: 'Raleway', sans-serif;
           font-size: 12px;
           font-weight: 600;
           letter-spacing: 0.1em;
           text-transform: uppercase;
-          text-decoration: none;
+          text-decoration: none !important;
           border: 1.5px solid var(--teal);
           cursor: pointer;
           transition: all 0.25s;
         }
         .btn-outline:hover {
           background: var(--teal);
-          color: var(--white);
+          color: #ffffff !important;
         }
 
         /* ── Stats ── */
@@ -342,8 +351,7 @@ export default function Footer() {
           font-family: 'Cormorant Garamond', serif;
           font-size: 22px;
           font-weight: 700;
-          color: var(--text-dark);
-          line-height: 1.1;
+          color: var(--text-dark) !important;
         }
         .logo-tagline {
           font-family: 'Raleway', sans-serif;
@@ -360,6 +368,8 @@ export default function Footer() {
           color: var(--text-mid);
           margin-bottom: 28px;
         }
+
+        /* Social buttons */
         .social-row {
           display: flex;
           gap: 10px;
@@ -368,15 +378,15 @@ export default function Footer() {
           width: 36px; height: 36px;
           border: 1.5px solid var(--border);
           display: flex; align-items: center; justify-content: center;
-          color: var(--text-mid);
+          color: var(--text-mid) !important;
           cursor: pointer;
           transition: all 0.2s;
-          text-decoration: none;
+          text-decoration: none !important;
         }
         .social-btn:hover {
           background: var(--teal);
           border-color: var(--teal);
-          color: var(--white);
+          color: #ffffff !important;
         }
 
         /* Column headings */
@@ -399,7 +409,7 @@ export default function Footer() {
           background: var(--gold);
         }
 
-        /* Practice area links */
+        /* Practice area & quick links — always dark on white bg */
         .link-list {
           list-style: none;
           padding: 0; margin: 0;
@@ -410,16 +420,22 @@ export default function Footer() {
         .link-list li a {
           font-family: 'Raleway', sans-serif;
           font-size: 13px;
-          color: var(--text-mid);
-          text-decoration: none;
+          color: #444444 !important;
+          text-decoration: none !important;
           display: flex;
           align-items: center;
           gap: 8px;
           transition: color 0.2s, gap 0.2s;
         }
         .link-list li a:hover {
-          color: var(--teal);
+          color: var(--teal) !important;
           gap: 12px;
+        }
+        .link-list li a:visited {
+          color: #444444 !important;
+        }
+        .link-list li a:hover:visited {
+          color: var(--teal) !important;
         }
         .link-list li a svg {
           opacity: 0.5;
@@ -450,7 +466,7 @@ export default function Footer() {
         }
         .contact-item:hover .contact-icon {
           background: var(--teal);
-          color: var(--white);
+          color: #ffffff;
           border-color: var(--teal);
         }
         .contact-text-label {
@@ -462,14 +478,20 @@ export default function Footer() {
           color: var(--gold);
           margin-bottom: 3px;
         }
+        /* Contact values — phone, email always dark */
         .contact-text-value {
           font-family: 'Raleway', sans-serif;
           font-size: 13px;
-          color: var(--text-dark);
+          color: #1A1A1A !important;
           line-height: 1.5;
-          text-decoration: none;
+          text-decoration: none !important;
         }
-        a.contact-text-value:hover { color: var(--teal); }
+        .contact-text-value:visited {
+          color: #1A1A1A !important;
+        }
+        a.contact-text-value:hover {
+          color: var(--teal) !important;
+        }
 
         /* Newsletter */
         .newsletter-box {
@@ -481,7 +503,7 @@ export default function Footer() {
           font-family: 'Cormorant Garamond', serif;
           font-size: 18px;
           font-weight: 600;
-          color: var(--white);
+          color: #ffffff;
           margin-bottom: 6px;
         }
         .newsletter-sub {
@@ -501,7 +523,7 @@ export default function Footer() {
           background: rgba(255,255,255,0.1);
           border: 1px solid rgba(255,255,255,0.2);
           border-right: none;
-          color: var(--white);
+          color: #ffffff;
           font-family: 'Raleway', sans-serif;
           font-size: 12px;
           outline: none;
@@ -513,7 +535,7 @@ export default function Footer() {
           padding: 11px 18px;
           background: var(--gold);
           border: 1px solid var(--gold);
-          color: var(--white);
+          color: #ffffff;
           cursor: pointer;
           display: flex; align-items: center;
           transition: background 0.2s;
@@ -554,6 +576,7 @@ export default function Footer() {
           font-size: 11.5px;
           color: rgba(255,255,255,0.5);
         }
+        /* Legal links — on dark teal bg, must be light */
         .footer-legal-links {
           display: flex;
           gap: 20px;
@@ -565,11 +588,16 @@ export default function Footer() {
           font-weight: 600;
           letter-spacing: 0.08em;
           text-transform: uppercase;
-          color: rgba(255,255,255,0.45);
-          text-decoration: none;
+          color: rgba(255,255,255,0.55) !important;
+          text-decoration: none !important;
           transition: color 0.2s;
         }
-        .footer-legal-links a:hover { color: var(--gold-light); }
+        .footer-legal-links a:visited {
+          color: rgba(255,255,255,0.55) !important;
+        }
+        .footer-legal-links a:hover {
+          color: var(--gold-light) !important;
+        }
 
         /* ── Back to Top ── */
         .back-to-top {
@@ -577,7 +605,7 @@ export default function Footer() {
           bottom: 28px; right: 28px;
           width: 44px; height: 44px;
           background: var(--teal);
-          color: var(--white);
+          color: #ffffff;
           border: none;
           cursor: pointer;
           display: flex; align-items: center; justify-content: center;
@@ -642,209 +670,214 @@ export default function Footer() {
         }
       `}</style>
 
-      {/* ── Ticker ── */}
-      <div className="ticker-wrap" aria-hidden="true">
-        <div className="ticker-inner">
-          {[...Array(2)].map((_, i) =>
-            ["No Fee Unless We Win", "Free Consultations Available 24/7", "Over 15,000 Cases Won", "Karachi's Most Trusted Legal Team", "Personal Injury Specialists", "Call Now: 0300-9209003", "Serving Karachi Since 1999"].map((t, j) => (
-              <span className="ticker-item" key={`${i}-${j}`}>
-                <span className="ticker-dot" />
-                {t}
-              </span>
-            ))
-          )}
-        </div>
-      </div>
+      {/* Wrap everything so global link reset scopes only to footer */}
+      <div className="footer-root">
 
-      {/* ── CTA Banner ── */}
-      <section className="cta-banner">
-        <div className="cta-inner">
-          <div>
-            <div className="cta-eyebrow">Free Case Evaluation</div>
-            <h2 className="cta-title">
-              Injured? You Deserve <em>Justice</em> & Full Compensation.
-            </h2>
-          </div>
-          <div className="cta-actions">
-            <a href="tel:03009209003" className="btn-primary">
-              <IconPhone /> Call Now
-            </a>
-            <a href="#" className="btn-outline">
-              Free Consultation <IconArrow />
-            </a>
+        {/* ── Ticker ── */}
+        <div className="ticker-wrap" aria-hidden="true">
+          <div className="ticker-inner">
+            {[...Array(2)].map((_, i) =>
+              ["No Fee Unless We Win", "Free Consultations Available 24/7", "Over 15,000 Cases Won", "Karachi's Most Trusted Legal Team", "Personal Injury Specialists", "Call Now: 0300-9209003", "Serving Karachi Since 1999"].map((t, j) => (
+                <span className="ticker-item" key={`${i}-${j}`}>
+                  <span className="ticker-dot" />
+                  {t}
+                </span>
+              ))
+            )}
           </div>
         </div>
-      </section>
 
-      {/* ── Stats Row ── */}
-      <div className="stats-row">
-        <div className="stats-inner">
-          <AnimatedStat end={15000} suffix="+" label="Cases Won" />
-          <AnimatedStat end={500} suffix="M+" label="Recovered ($)" />
-          <AnimatedStat end={25} suffix="+" label="Years Experience" />
-          <AnimatedStat end={98} suffix="%" label="Client Satisfaction" />
+        {/* ── CTA Banner ── */}
+        <section className="cta-banner">
+          <div className="cta-inner">
+            <div>
+              <div className="cta-eyebrow">Free Case Evaluation</div>
+              <h2 className="cta-title">
+                Injured? You Deserve <em>Justice</em> &amp; Full Compensation.
+              </h2>
+            </div>
+            <div className="cta-actions">
+              <a href="tel:03009209003" className="btn-primary">
+                <IconPhone /> Call Now
+              </a>
+              <a href="#" className="btn-outline">
+                Free Consultation <IconArrow />
+              </a>
+            </div>
+          </div>
+        </section>
+
+        {/* ── Stats Row ── */}
+        <div className="stats-row">
+          <div className="stats-inner">
+            <AnimatedStat end={15000} suffix="+" label="Cases Won" />
+            <AnimatedStat end={500} suffix="M+" label="Recovered ($)" />
+            <AnimatedStat end={25} suffix="+" label="Years Experience" />
+            <AnimatedStat end={98} suffix="%" label="Client Satisfaction" />
+          </div>
         </div>
-      </div>
 
-      {/* ── Main Footer ── */}
-      <footer className="footer-main">
-        <div className="footer-grid">
+        {/* ── Main Footer ── */}
+        <footer className="footer-main">
+          <div className="footer-grid">
 
-          {/* Col 1 — Brand */}
-          <div>
-            <div className="footer-logo">
-              <div className="footer-logo-icon">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v17.25m0 0c-1.472 0-2.882.265-4.185.75M12 20.25c1.472 0 2.882.265 4.185.75M18.75 4.97A48.416 48.416 0 0012 4.5c-2.291 0-4.545.16-6.75.47m13.5 0c1.01.143 2.01.317 3 .52m-3-.52l2.62 10.726c.122.499-.106 1.028-.589 1.202a5.988 5.988 0 01-2.031.352 5.988 5.988 0 01-2.031-.352c-.483-.174-.711-.703-.59-1.202L18.75 4.971zm-16.5.52c-.99.143-1.99.317-3 .52m3-.52L2.25 15.196c-.122.499.106 1.028.589 1.202a5.989 5.989 0 002.031.352 5.989 5.989 0 002.031-.352c.483-.174.711-.703.59-1.202L5.25 4.971z" />
-                </svg>
+            {/* Col 1 — Brand */}
+            <div>
+              <div className="footer-logo">
+                <div className="footer-logo-icon">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v17.25m0 0c-1.472 0-2.882.265-4.185.75M12 20.25c1.472 0 2.882.265 4.185.75M18.75 4.97A48.416 48.416 0 0012 4.5c-2.291 0-4.545.16-6.75.47m13.5 0c1.01.143 2.01.317 3 .52m-3-.52l2.62 10.726c.122.499-.106 1.028-.589 1.202a5.988 5.988 0 01-2.031.352 5.988 5.988 0 01-2.031-.352c-.483-.174-.711-.703-.59-1.202L18.75 4.971zm-16.5.52c-.99.143-1.99.317-3 .52m3-.52L2.25 15.196c-.122.499.106 1.028.589 1.202a5.989 5.989 0 002.031.352 5.989 5.989 0 002.031-.352c.483-.174.711-.703.59-1.202L5.25 4.971z" />
+                  </svg>
+                </div>
+                <div>
+                  <div className="logo-name">Amin Law Associates</div>
+                  <div className="logo-tagline">Advocates &amp; Legal Consultants</div>
+                </div>
               </div>
-              <div>
-                <div className="logo-name">Amin Law Associates</div>
-                <div className="logo-tagline">Advocates & Legal Consultants</div>
+              <p className="footer-desc">
+                With over two decades of dedicated legal service in Karachi, our attorneys fight relentlessly to protect your rights and secure the compensation you deserve. No fees until we win your case.
+              </p>
+              <div className="social-row">
+                {/* Facebook */}
+                <a href="https://www.facebook.com/people/Amin-law-Associates/61569270775405/" className="social-btn" aria-label="Facebook">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>
+                </a>
+                {/* Instagram */}
+                <a href="#" className="social-btn" aria-label="Instagram">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+                </a>
+                {/* LinkedIn */}
+                <a href="#" className="social-btn" aria-label="LinkedIn">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
+                </a>
+                {/* WhatsApp */}
+                <a href="https://wa.me/923009209003" className="social-btn" aria-label="WhatsApp">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                </a>
               </div>
             </div>
-            <p className="footer-desc">
-              With over two decades of dedicated legal service in Karachi, our attorneys fight relentlessly to protect your rights and secure the compensation you deserve. No fees until we win your case.
+
+            {/* Col 2 — Practice Areas */}
+            <div>
+              <h3 className="col-heading">Practice Areas</h3>
+              <ul className="link-list">
+                {practiceAreas.map((a) => (
+                  <li key={a.label}>
+                    <a href={a.href}>
+                      <IconChevronRight />
+                      {a.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Col 3 — Quick Links */}
+            <div>
+              <h3 className="col-heading">Quick Links</h3>
+              <ul className="link-list">
+                {quickLinks.map((l) => (
+                  <li key={l.label}>
+                    <a href={l.href}>
+                      <IconChevronRight />
+                      {l.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Col 4 — Contact */}
+            <div>
+              <h3 className="col-heading">Contact Us</h3>
+              <div className="contact-list">
+                <div className="contact-item">
+                  <div className="contact-icon"><IconPhone /></div>
+                  <div>
+                    <div className="contact-text-label">Mobile</div>
+                    <a href="tel:03009209003" className="contact-text-value">0300-9209003</a>
+                  </div>
+                </div>
+                <div className="contact-item">
+                  <div className="contact-icon"><IconPhone /></div>
+                  <div>
+                    <div className="contact-text-label">PTCL / Landline</div>
+                    <a href="tel:02134899996" className="contact-text-value">021-34899996</a>
+                  </div>
+                </div>
+                <div className="contact-item">
+                  <div className="contact-icon"><IconMail /></div>
+                  <div>
+                    <div className="contact-text-label">Email Us</div>
+                    <a href="mailto:info@lawfirm.com" className="contact-text-value">Aminlawassociates7@gmail.com</a>
+                  </div>
+                </div>
+                <div className="contact-item">
+                  <div className="contact-icon"><IconLocation /></div>
+                  <div>
+                    <div className="contact-text-label">Office Address</div>
+                    <span className="contact-text-value">
+                      Mezzanine Floor, Plot #61 Commercial,<br />
+                      Jamshaid II, District East,<br />
+                      Karachi
+                    </span>
+                  </div>
+                </div>
+                <div className="contact-item">
+                  <div className="contact-icon"><IconClock /></div>
+                  <div>
+                    <div className="contact-text-label">Office Hours</div>
+                    <span className="contact-text-value">Mon–Sat: 9AM–7PM<br />24/7 Emergency Line</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Newsletter */}
+              <div className="newsletter-box">
+                <div className="newsletter-title">Stay Informed</div>
+                <div className="newsletter-sub">Legal updates &amp; case insights straight to your inbox.</div>
+                {subscribed ? (
+                  <div className="subscribed-msg">✓ Thank you for subscribing!</div>
+                ) : (
+                  <form className="newsletter-form" onSubmit={handleSubscribe}>
+                    <input
+                      className="newsletter-input"
+                      type="email"
+                      placeholder="Your email address"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      required
+                    />
+                    <button type="submit" className="newsletter-btn" aria-label="Subscribe">
+                      <IconArrow />
+                    </button>
+                  </form>
+                )}
+              </div>
+            </div>
+          </div>
+
+          <hr className="footer-divider" />
+        </footer>
+
+        {/* ── Bottom Bar ── */}
+        <div className="footer-bottom">
+          <div className="footer-bottom-inner">
+            <p className="footer-copy">
+              © {new Date().getFullYear()} Justice Law Firm, Karachi. All rights reserved.
             </p>
-            <div className="social-row">
-              {/* Facebook */}
-              <a href="#" className="social-btn" aria-label="Facebook">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>
-              </a>
-              {/* Instagram */}
-              <a href="#" className="social-btn" aria-label="Instagram">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
-              </a>
-              {/* LinkedIn */}
-              <a href="#" className="social-btn" aria-label="LinkedIn">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
-              </a>
-              {/* WhatsApp */}
-              <a href="https://wa.me/923009209003" className="social-btn" aria-label="WhatsApp">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-              </a>
-            </div>
-          </div>
-
-          {/* Col 2 — Practice Areas */}
-          <div>
-            <h3 className="col-heading">Practice Areas</h3>
-            <ul className="link-list">
-              {practiceAreas.map((a) => (
-                <li key={a.label}>
-                  <a href={a.href}>
-                    <IconChevronRight />
-                    {a.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Col 3 — Quick Links */}
-          <div>
-            <h3 className="col-heading">Quick Links</h3>
-            <ul className="link-list">
-              {quickLinks.map((l) => (
-                <li key={l.label}>
-                  <a href={l.href}>
-                    <IconChevronRight />
-                    {l.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Col 4 — Contact */}
-          <div>
-            <h3 className="col-heading">Contact Us</h3>
-            <div className="contact-list">
-              <div className="contact-item">
-                <div className="contact-icon"><IconPhone /></div>
-                <div>
-                  <div className="contact-text-label">Mobile</div>
-                  <a href="tel:03009209003" className="contact-text-value">0300-9209003</a>
-                </div>
-              </div>
-              <div className="contact-item">
-                <div className="contact-icon"><IconPhone /></div>
-                <div>
-                  <div className="contact-text-label">PTCL / Landline</div>
-                  <a href="tel:02134899996" className="contact-text-value">021-34899996</a>
-                </div>
-              </div>
-              <div className="contact-item">
-                <div className="contact-icon"><IconMail /></div>
-                <div>
-                  <div className="contact-text-label">Email Us</div>
-                  <a href="mailto:info@lawfirm.com" className="contact-text-value">info@lawfirm.com</a>
-                </div>
-              </div>
-              <div className="contact-item">
-                <div className="contact-icon"><IconLocation /></div>
-                <div>
-                  <div className="contact-text-label">Office Address</div>
-                  <span className="contact-text-value">
-                    Mezzanine Floor, Plot #61 Commercial,<br />
-                    Jamshaid II, District East,<br />
-                    Karachi
-                  </span>
-                </div>
-              </div>
-              <div className="contact-item">
-                <div className="contact-icon"><IconClock /></div>
-                <div>
-                  <div className="contact-text-label">Office Hours</div>
-                  <span className="contact-text-value">Mon–Sat: 9AM–7PM<br />24/7 Emergency Line</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Newsletter */}
-            <div className="newsletter-box">
-              <div className="newsletter-title">Stay Informed</div>
-              <div className="newsletter-sub">Legal updates & case insights straight to your inbox.</div>
-              {subscribed ? (
-                <div className="subscribed-msg">✓ Thank you for subscribing!</div>
-              ) : (
-                <form className="newsletter-form" onSubmit={handleSubscribe}>
-                  <input
-                    className="newsletter-input"
-                    type="email"
-                    placeholder="Your email address"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                  />
-                  <button type="submit" className="newsletter-btn" aria-label="Subscribe">
-                    <IconArrow />
-                  </button>
-                </form>
-              )}
-            </div>
+            <nav className="footer-legal-links">
+              <a href="#">Privacy Policy</a>
+              <a href="#">Terms of Service</a>
+              <a href="#">Disclaimer</a>
+              <a href="#">Sitemap</a>
+            </nav>
           </div>
         </div>
 
-        <hr className="footer-divider" />
-      </footer>
+      </div>{/* end footer-root */}
 
-      {/* ── Bottom Bar ── */}
-      <div className="footer-bottom">
-        <div className="footer-bottom-inner">
-          <p className="footer-copy">
-            © {new Date().getFullYear()} Justice Law Firm, Karachi. All rights reserved.
-          </p>
-          <nav className="footer-legal-links">
-            <a href="#">Privacy Policy</a>
-            <a href="#">Terms of Service</a>
-            <a href="#">Disclaimer</a>
-            <a href="#">Sitemap</a>
-          </nav>
-        </div>
-      </div>
-
-      {/* ── Back to Top ── */}
+      {/* ── Back to Top (outside footer-root so fixed positioning works) ── */}
       <button
         className={`back-to-top ${showTop ? "visible" : ""}`}
         onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}

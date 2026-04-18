@@ -1,5 +1,5 @@
 "use client";
-import { useState, useRef } from "react";
+import { useState } from "react";
 
 export default function Consultation() {
   const [form, setForm] = useState({
@@ -10,7 +10,6 @@ export default function Consultation() {
     message: "",
   });
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
-  const [focused, setFocused] = useState<string | null>(null);
 
   const caseTypes = [
     "Personal Injury",
@@ -32,17 +31,75 @@ export default function Consultation() {
     if (!form.name || !form.email || !form.message) return;
     setStatus("sending");
 
+    // ── Attempt 1: AJAX fetch ──────────────────────────────────────────────
     try {
-      const res = await fetch("https://formsubmit.co/ajax/Fizanaazz321@gmail.com", {
+      const res = await fetch("https://formsubmit.co/ajax/Aminlawassociates7@gmail.com", {
         method: "POST",
-        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
         body: JSON.stringify({
-          ...form,
-          _subject: `New Consultation Request from ${form.name}`,
+          "Full Name": form.name,
+          "Email Address": form.email,
+          "Phone Number": form.phone || "Not provided",
+          "Case Type": form.caseType || "Not specified",
+          "Message / Case Description": form.message,
+          _subject: `New Consultation Request — ${form.name} | Amin Law Associates`,
+          _replyto: form.email,
+          _template: "table",
+          _captcha: "false",
+          _autoresponse: `Dear ${form.name},\n\nThank you for reaching out to Amin Law Associates. We have received your consultation request and our team will review your matter carefully.\n\nA member of our legal team will contact you within 24 hours.\n\nWarm regards,\nAmin Law Associates`,
         }),
       });
-      if (res.ok) setStatus("sent");
-      else setStatus("error");
+
+      // ✅ FIX: parse body — res.ok alone is NOT enough for FormSubmit
+      const data = await res.json().catch(() => null);
+      if (res.ok && data?.success === "true") {
+        setStatus("sent");
+        setForm({ name: "", email: "", phone: "", caseType: "", message: "" });
+        return;
+      }
+    } catch {
+      // CORS or network error — fall through to hidden form fallback
+    }
+
+    // ── Attempt 2: hidden <form> POST (bypasses CORS completely) ──────────
+    try {
+      const hiddenForm = document.createElement("form");
+      hiddenForm.method = "POST";
+      hiddenForm.action = "https://formsubmit.co/Aminlawassociates7@gmail.com";
+      hiddenForm.target = "_blank";
+      hiddenForm.style.display = "none";
+
+      const fields: Record<string, string> = {
+        "Full Name": form.name,
+        "Email Address": form.email,
+        "Phone Number": form.phone || "Not provided",
+        "Case Type": form.caseType || "Not specified",
+        "Message / Case Description": form.message,
+        _subject: `New Consultation Request — ${form.name} | Amin Law Associates`,
+        _replyto: form.email,
+        _template: "table",
+        _captcha: "false",
+        _next: window.location.href,
+        _autoresponse: `Dear ${form.name},\n\nThank you for reaching out to Amin Law Associates. We have received your consultation request and our team will review your matter carefully.\n\nA member of our legal team will contact you within 24 hours.\n\nWarm regards,\nAmin Law Associates`,
+      };
+
+      Object.entries(fields).forEach(([name, value]) => {
+        const input = document.createElement("input");
+        input.type = "hidden";
+        input.name = name;
+        input.value = value;
+        hiddenForm.appendChild(input);
+      });
+
+      document.body.appendChild(hiddenForm);
+      hiddenForm.submit();
+      document.body.removeChild(hiddenForm);
+
+      setStatus("sent");
+      setForm({ name: "", email: "", phone: "", caseType: "", message: "" });
     } catch {
       setStatus("error");
     }
@@ -115,7 +172,6 @@ export default function Consultation() {
           to { opacity: 1; transform: translateY(0); }
         }
 
-        /* LEFT PANEL */
         .consult-left {
           background: #1a4a38;
           padding: 52px 40px;
@@ -223,7 +279,6 @@ export default function Consultation() {
           font-weight: 300;
         }
 
-        /* RIGHT PANEL */
         .consult-right {
           padding: 52px 48px;
           background: #ffffff;
@@ -335,156 +390,54 @@ export default function Consultation() {
         .status-error { color: #c0392b; }
         .status-sending { color: #888; }
 
-        /* ─── RESPONSIVE BREAKPOINTS ─── */
-
-        /* Large tablets: 769px – 1024px */
         @media (max-width: 1024px) and (min-width: 769px) {
-          .consult-section {
-            padding: 60px 20px;
-          }
-          .consult-inner {
-            grid-template-columns: 1fr 1.4fr;
-            max-width: 100%;
-          }
-          .consult-left {
-            padding: 44px 32px;
-          }
-          .left-title {
-            font-size: 32px;
-          }
-          .consult-right {
-            padding: 44px 36px;
-          }
-          .right-title {
-            font-size: 24px;
-            margin-bottom: 24px;
-          }
+          .consult-section { padding: 60px 20px; }
+          .consult-inner { grid-template-columns: 1fr 1.4fr; max-width: 100%; }
+          .consult-left { padding: 44px 32px; }
+          .left-title { font-size: 32px; }
+          .consult-right { padding: 44px 36px; }
+          .right-title { font-size: 24px; margin-bottom: 24px; }
         }
 
-        /* Tablets & small screens: up to 768px */
         @media (max-width: 768px) {
-          .consult-section {
-            padding: 40px 16px;
-            align-items: flex-start;
-          }
-          .consult-inner {
-            grid-template-columns: 1fr;
-          }
-          .consult-left {
-            padding: 36px 24px;
-          }
-          .consult-left::before {
-            font-size: 160px;
-          }
-          .left-title {
-            font-size: 30px;
-          }
-          .left-desc {
-            margin-bottom: 28px;
-          }
-          .info-list {
-            gap: 14px;
-          }
-          .consult-right {
-            padding: 36px 24px;
-          }
-          .right-title {
-            font-size: 24px;
-            margin-bottom: 24px;
-          }
-          .form-row {
-            grid-template-columns: 1fr;
-            gap: 0;
-            margin-bottom: 0;
-          }
-          .form-group {
-            margin-bottom: 14px;
-          }
+          .consult-section { padding: 40px 16px; align-items: flex-start; }
+          .consult-inner { grid-template-columns: 1fr; }
+          .consult-left { padding: 36px 24px; }
+          .consult-left::before { font-size: 160px; }
+          .left-title { font-size: 30px; }
+          .left-desc { margin-bottom: 28px; }
+          .info-list { gap: 14px; }
+          .consult-right { padding: 36px 24px; }
+          .right-title { font-size: 24px; margin-bottom: 24px; }
+          .form-row { grid-template-columns: 1fr; gap: 0; margin-bottom: 0; }
+          .form-group { margin-bottom: 14px; }
         }
 
-        /* Mobile phones: up to 480px */
         @media (max-width: 480px) {
-          .consult-section {
-            padding: 24px 12px;
-          }
-          .consult-left {
-            padding: 28px 20px;
-          }
-          .consult-left::before {
-            font-size: 120px;
-          }
-          .badge {
-            padding: 5px 10px;
-            margin-bottom: 20px;
-          }
-          .badge-text {
-            font-size: 9px;
-            letter-spacing: 1.5px;
-          }
-          .left-title {
-            font-size: 26px;
-            margin-bottom: 12px;
-          }
-          .left-desc {
-            font-size: 12px;
-            margin-bottom: 24px;
-          }
-          .info-icon {
-            width: 28px;
-            height: 28px;
-            font-size: 11px;
-          }
-          .info-text strong {
-            font-size: 10px;
-          }
-          .info-text span {
-            font-size: 12px;
-          }
-          .consult-right {
-            padding: 28px 20px;
-          }
-          .right-label {
-            font-size: 9px;
-            letter-spacing: 2px;
-          }
-          .right-title {
-            font-size: 22px;
-            margin-bottom: 20px;
-          }
-          .form-label {
-            font-size: 9px;
-          }
-          .form-input,
-          .form-select,
-          .form-textarea {
-            font-size: 14px; /* prevent iOS zoom on focus */
-            padding: 10px 0;
-          }
-          .form-textarea {
-            height: 90px;
-          }
-          .submit-btn {
-            padding: 14px;
-            font-size: 10px;
-            letter-spacing: 2px;
-          }
-          .status-msg {
-            font-size: 11px;
-          }
+          .consult-section { padding: 24px 12px; }
+          .consult-left { padding: 28px 20px; }
+          .consult-left::before { font-size: 120px; }
+          .badge { padding: 5px 10px; margin-bottom: 20px; }
+          .badge-text { font-size: 9px; letter-spacing: 1.5px; }
+          .left-title { font-size: 26px; margin-bottom: 12px; }
+          .left-desc { font-size: 12px; margin-bottom: 24px; }
+          .info-icon { width: 28px; height: 28px; font-size: 11px; }
+          .info-text strong { font-size: 10px; }
+          .info-text span { font-size: 12px; }
+          .consult-right { padding: 28px 20px; }
+          .right-label { font-size: 9px; letter-spacing: 2px; }
+          .right-title { font-size: 22px; margin-bottom: 20px; }
+          .form-label { font-size: 9px; }
+          .form-input, .form-select, .form-textarea { font-size: 14px; padding: 10px 0; }
+          .form-textarea { height: 90px; }
+          .submit-btn { padding: 14px; font-size: 10px; letter-spacing: 2px; }
+          .status-msg { font-size: 11px; }
         }
 
-        /* Very small phones: up to 360px */
         @media (max-width: 360px) {
-          .left-title {
-            font-size: 22px;
-          }
-          .right-title {
-            font-size: 20px;
-          }
-          .consult-left,
-          .consult-right {
-            padding: 24px 16px;
-          }
+          .left-title { font-size: 22px; }
+          .right-title { font-size: 20px; }
+          .consult-left, .consult-right { padding: 24px 16px; }
         }
       `}</style>
 
@@ -516,7 +469,7 @@ export default function Consultation() {
                 <span className="info-icon">◎</span>
                 <div className="info-text">
                   <strong>Confidential</strong>
-                  <span>100% private & secure</span>
+                  <span>100% private &amp; secure</span>
                 </div>
               </li>
               <li className="info-item">
@@ -610,7 +563,7 @@ export default function Consultation() {
 
             {status === "sent" && (
               <p className="status-msg status-sent">
-                ✓ Thank you! We'll be in touch within 24 hours.
+                ✓ Thank you! We&apos;ll be in touch within 24 hours.
               </p>
             )}
             {status === "error" && (
