@@ -712,7 +712,7 @@ export default function PracticeAreas() {
               Schedule a free consultation and speak directly with one of our senior attorneys — no obligation, no pressure.
             </p>
             <div className="badge-row" style={{ display: "flex", gap: 10, marginTop: 28, flexWrap: "wrap" }}>
-              {["📞 +923009209003", "📧 Fizanaazz321@gmail.com", "🕒 Mon–Sat, 8am–8pm"].map(info => (
+              {["📞 +923009209003", "📧 Aminlawassociates7@gmail.com", "🕒 Mon–Sat, 8am–8pm"].map(info => (
                 <div key={info} style={{
                   padding: "7px 12px",
                   background: "rgba(255,255,255,0.07)",

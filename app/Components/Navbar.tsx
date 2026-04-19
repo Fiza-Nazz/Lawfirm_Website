@@ -163,15 +163,24 @@ const NAV_STYLES = `
   .nb-mainbar {
     background: #ffffff;
     height: 56px;
-    display: flex; align-items: stretch;
+    display: flex;
+    align-items: stretch;
     padding: 0 48px;
     border-bottom: 2px solid var(--deep);
     position: relative;
     box-shadow: 0 4px 24px rgba(0,0,0,0.07);
-    overflow-x: auto; overflow-y: hidden;
+    /* FIX: No overflow-x scroll on mobile */
+    overflow: hidden;
   }
   @media (max-width: 1024px) { .nb-mainbar { padding: 0 32px; height: 52px; } }
-  @media (max-width: 768px)  { .nb-mainbar { padding: 0 20px; height: 48px; } }
+  @media (max-width: 768px)  {
+    .nb-mainbar {
+      padding: 0 16px;
+      height: 48px;
+      /* On mobile, hide mainbar — hamburger menu handles navigation */
+      display: none;
+    }
+  }
   @media (max-width: 480px)  { .nb-mainbar { padding: 0 12px; height: 44px; } }
 
   /* scrolled */
@@ -179,33 +188,41 @@ const NAV_STYLES = `
   .nb-root.scrolled .nb-mainbar { box-shadow: 0 6px 30px rgba(0,0,0,0.1);  transition: all 0.35s ease; }
 
   /* ─── NAV LINKS ─── */
-  .nb-nav { display: flex; align-items: stretch; list-style: none; flex: 1; flex-wrap: nowrap; }
+  .nb-nav {
+    display: flex;
+    align-items: stretch;
+    list-style: none;
+    flex: 1;
+    flex-wrap: nowrap;
+    /* FIX: prevent nav from overflowing */
+    min-width: 0;
+    overflow: hidden;
+  }
   .nb-nav-item { display: flex; align-items: center; position: relative; }
 
   .nb-nav-link {
     display: flex; align-items: center; gap: 6px;
-    padding: 0 18px; height: 100%;
+    padding: 0 16px; height: 100%;
     color: #3a3a3a;
     text-decoration: none;
-    font-size: 10px; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase;
+    font-size: 10px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase;
     cursor: pointer; position: relative;
     transition: color 0.25s;
     white-space: nowrap; background: none; border: none;
     font-family: 'Outfit', sans-serif;
   }
-  @media (max-width: 1024px) { .nb-nav-link { padding: 0 13px; font-size: 9px; letter-spacing: 2px; } }
-  @media (max-width: 768px)  { .nb-nav-link { padding: 0 10px; font-size: 8.5px; letter-spacing: 1.5px; } }
-  @media (max-width: 480px)  { .nb-nav-link { padding: 0 8px; font-size: 8px; letter-spacing: 1px; gap: 3px; } }
+  @media (max-width: 1200px) { .nb-nav-link { padding: 0 12px; font-size: 9.5px; letter-spacing: 1.8px; } }
+  @media (max-width: 1024px) { .nb-nav-link { padding: 0 10px; font-size: 9px; letter-spacing: 1.5px; } }
 
   .nb-nav-link::after {
     content: '';
-    position: absolute; bottom: 0; left: 18px; right: 18px; height: 2.5px;
+    position: absolute; bottom: 0; left: 16px; right: 16px; height: 2.5px;
     background: linear-gradient(90deg, var(--deep), var(--gold));
     transform: scaleX(0); transform-origin: left;
     transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
     border-radius: 2px 2px 0 0;
   }
-  @media (max-width: 1024px) { .nb-nav-link::after { left: 13px; right: 13px; } }
+  @media (max-width: 1024px) { .nb-nav-link::after { left: 10px; right: 10px; } }
 
   .nb-nav-link:hover, .nb-nav-link.active { color: var(--deep); }
   .nb-nav-link:hover::after, .nb-nav-link.active::after { transform: scaleX(1); }
@@ -214,7 +231,6 @@ const NAV_STYLES = `
     color: var(--gold); font-size: 7px; opacity: 0.7;
     transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1), opacity 0.25s;
   }
-  @media (max-width: 480px) { .nb-star { display: none; } }
   .nb-nav-link:hover .nb-star, .nb-nav-link.active .nb-star { transform: rotate(72deg) scale(1.4); opacity: 1; color: var(--gold2); }
 
   /* ─── STANDARD DROPDOWN ─── */
@@ -235,8 +251,6 @@ const NAV_STYLES = `
     perspective: 800px;
     max-height: 70vh; overflow-y: auto;
   }
-  @media (max-width: 768px) { .nb-dropdown { min-width: 200px; } }
-  @media (max-width: 480px) { .nb-dropdown { min-width: 170px; max-height: 50vh; } }
 
   .nb-nav-item:hover .nb-dropdown {
     opacity: 1; visibility: visible;
@@ -270,7 +284,6 @@ const NAV_STYLES = `
     border-left: 3px solid transparent;
     transition: color 0.2s, padding-left 0.25s ease, background 0.2s, border-left-color 0.2s;
   }
-  @media (max-width: 480px) { .nb-dropdown a { padding: 9px 14px 9px 12px; font-size: 9px; letter-spacing: 1px; } }
 
   .nb-dropdown a:hover { color: var(--deep); padding-left: 28px; border-left-color: var(--gold); background: rgba(26,74,56,0.03); }
   .nb-dropdown-icon { color: var(--gold); font-size: 8px; opacity: 0; transform: translateX(-6px); transition: all 0.22s cubic-bezier(0.34,1.56,0.64,1); flex-shrink: 0; }
@@ -329,13 +342,9 @@ const NAV_STYLES = `
   }
   @media (max-width: 1440px) { .nb-mega-dropdown { left: -120px; width: 700px; } }
   @media (max-width: 1200px) { .nb-mega-dropdown { left: 0; width: 600px; padding: 24px 28px 20px; } }
-  @media (max-width: 768px)  { .nb-mega-dropdown { width: 500px; padding: 20px 24px 16px; left: -50px; } }
-  @media (max-width: 600px)  { .nb-mega-dropdown { width: calc(100vw - 28px); left: 0; padding: 16px 16px 12px; } }
 
   .nb-nav-item:hover .nb-mega-dropdown { opacity: 1; visibility: visible; transform: translateY(0) rotateX(0deg); pointer-events: auto; }
   .nb-mega-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0 24px; }
-  @media (max-width: 768px) { .nb-mega-grid { grid-template-columns: repeat(2, 1fr); gap: 20px 24px; } }
-  @media (max-width: 480px) { .nb-mega-grid { grid-template-columns: 1fr 1fr; gap: 16px 16px; } }
 
   .nb-mega-col h4 {
     font-family: 'Cinzel', serif;
@@ -422,6 +431,7 @@ const NAV_STYLES = `
     transform: translateY(20px) scale(0.97);
     transition: transform 0.4s cubic-bezier(0.22,1,0.36,1) 0.05s;
   }
+  @media (max-width: 480px) { .nb-search-inner { padding: 0 20px; } }
   .nb-search-overlay.open .nb-search-inner { transform: translateY(0) scale(1); }
   .nb-search-label {
     font-family: 'Cinzel', serif;
@@ -444,6 +454,7 @@ const NAV_STYLES = `
     font-size: 32px; font-weight: 400; font-style: italic;
     color: #ffffff; letter-spacing: 1px; caret-color: var(--gold2);
   }
+  @media (max-width: 480px) { .nb-search-input { font-size: 22px; } }
   .nb-search-input::placeholder { color: rgba(255,255,255,0.2); }
   .nb-search-hint { margin-top: 20px; font-size: 9.5px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.25); }
   .nb-search-close {
@@ -467,10 +478,13 @@ const NAV_STYLES = `
     border-top: 2px solid var(--deep);
     border-bottom: 2px solid rgba(184,152,72,0.2);
     box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+    /* FIX: ensure no horizontal scroll in slide menu */
+    width: 100%;
+    overflow-x: hidden;
   }
-  .nb-mega.open { max-height: 520px; opacity: 1; }
+  .nb-mega.open { max-height: 600px; opacity: 1; }
 
-  .nb-mega-list { list-style: none; padding: 12px 0; border-bottom: 1px solid rgba(0,0,0,0.06); }
+  .nb-mega-list { list-style: none; padding: 8px 0; border-bottom: 1px solid rgba(0,0,0,0.06); }
   .nb-mega-item { opacity: 0; transform: translateX(-20px); transition: opacity 0.32s ease, transform 0.32s ease; }
   .nb-mega.open .nb-mega-item { opacity: 1; transform: translateX(0); }
   .nb-mega.open .nb-mega-item:nth-child(1) { transition-delay: 0.05s; }
@@ -482,7 +496,7 @@ const NAV_STYLES = `
 
   .nb-mega-link {
     display: flex; align-items: center; gap: 14px;
-    padding: 13px 48px;
+    padding: 14px 32px;
     color: #3a3a3a;
     text-decoration: none; font-size: 10px; font-weight: 600;
     letter-spacing: 3px; text-transform: uppercase; cursor: pointer;
@@ -493,19 +507,68 @@ const NAV_STYLES = `
     background: none; border-top: none; border-right: none; border-bottom: none;
     width: 100%; text-align: left;
   }
-  @media (max-width: 480px) { .nb-mega-link { padding: 12px 24px; letter-spacing: 2px; } }
-  .nb-mega-link:hover { color: var(--deep); padding-left: 64px; border-left: 3px solid var(--gold); background: rgba(26,74,56,0.03); }
-  @media (max-width: 480px) { .nb-mega-link:hover { padding-left: 36px; } }
+  @media (max-width: 480px) { .nb-mega-link { padding: 13px 20px; letter-spacing: 2px; } }
+  .nb-mega-link:hover { color: var(--deep); padding-left: 48px; border-left: 3px solid var(--gold); background: rgba(26,74,56,0.03); }
+  @media (max-width: 480px) { .nb-mega-link:hover { padding-left: 32px; } }
   .nb-mega-arrow { opacity: 0; transform: translateX(-6px); color: var(--gold); font-size: 12px; transition: opacity 0.22s, transform 0.28s cubic-bezier(0.34,1.56,0.64,1); }
   .nb-mega-link:hover .nb-mega-arrow { opacity: 1; transform: translateX(0); }
 
+  /* ─── MOBILE CALL-TO-ACTION inside hamburger menu ─── */
+  .nb-mega-mobile-ctas {
+    display: none;
+    padding: 12px 20px;
+    gap: 10px;
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+  }
+  @media (max-width: 768px) { .nb-mega-mobile-ctas { display: flex; flex-direction: column; } }
+
+  .nb-mega-mobile-btn {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    padding: 12px 20px; font-size: 10px; font-weight: 700;
+    letter-spacing: 2.5px; text-transform: uppercase;
+    border: none; cursor: pointer; border-radius: 1px;
+    font-family: 'Outfit', sans-serif; transition: all 0.25s ease;
+    width: 100%;
+  }
+  .nb-mega-mobile-btn.primary {
+    background: linear-gradient(135deg, var(--deep) 0%, var(--mid) 100%);
+    color: #ffffff;
+  }
+  .nb-mega-mobile-btn.primary:hover { background: linear-gradient(135deg, var(--gold) 0%, var(--gold2) 100%); color: var(--deeper); }
+  .nb-mega-mobile-btn.outline {
+    background: transparent;
+    border: 1.5px solid rgba(26,74,56,0.3);
+    color: var(--deep);
+  }
+  .nb-mega-mobile-btn.outline:hover { border-color: var(--deep); background: rgba(26,74,56,0.06); }
+
+  /* ─── MOBILE CONTACT INFO inside hamburger menu ─── */
+  .nb-mega-mobile-info {
+    display: none;
+    padding: 12px 20px;
+    gap: 10px;
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+  }
+  @media (max-width: 900px) { .nb-mega-mobile-info { display: flex; flex-direction: column; } }
+
+  .nb-mega-mobile-info-row {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 12px;
+    background: #fafafa;
+    border: 1px solid rgba(184,152,72,0.15);
+    border-radius: 2px;
+  }
+  .nb-mega-mobile-info-row svg { color: var(--gold); flex-shrink: 0; }
+  .nb-mega-mobile-info-main { font-size: 12px; font-weight: 700; color: var(--deeper); font-family: 'Cinzel', serif; }
+  .nb-mega-mobile-info-sub { font-size: 8px; font-weight: 400; color: #888; letter-spacing: 1.5px; text-transform: uppercase; margin-top: 1px; }
+
   .nb-mega-footer {
     display: flex; align-items: center; justify-content: space-between;
-    padding: 16px 48px;
+    padding: 14px 32px;
     opacity: 0; transform: translateY(10px);
     transition: opacity 0.35s ease 0.28s, transform 0.35s ease 0.28s;
   }
-  @media (max-width: 480px) { .nb-mega-footer { padding: 14px 24px; flex-direction: column; gap: 10px; align-items: flex-start; } }
+  @media (max-width: 480px) { .nb-mega-footer { padding: 12px 20px; flex-direction: column; gap: 10px; align-items: flex-start; } }
   .nb-mega.open .nb-mega-footer { opacity: 1; transform: translateY(0); }
   .nb-mega-footer-copy { font-family: 'Playfair Display', serif; font-style: italic; font-size: 11px; color: #999; letter-spacing: 1px; }
   .nb-mega-socials { display: flex; gap: 18px; }
@@ -646,6 +709,17 @@ const Navbar: React.FC = () => {
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 
+  // Close menu on outside click
+  useEffect(() => {
+    if (!menuOpen) return;
+    const handler = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (!target.closest(".nb-root")) setMenuOpen(false);
+    };
+    document.addEventListener("click", handler);
+    return () => document.removeEventListener("click", handler);
+  }, [menuOpen]);
+
   return (
     <div className={`nb-root${scrolled ? " scrolled" : ""}`}>
       <style>{NAV_STYLES}</style>
@@ -674,7 +748,7 @@ const Navbar: React.FC = () => {
 
       {/* ===== TOP BAR ===== */}
       <div className="nb-topbar">
-        {/* Logo — actual image only, no text */}
+        {/* Logo */}
         <a className="nb-logo" href="#">
           <div className="nb-logo-emblem">
             <img
@@ -687,7 +761,7 @@ const Navbar: React.FC = () => {
 
         <div className="nb-spacer" />
 
-        {/* Info groups */}
+        {/* Info groups — hidden on mobile via CSS */}
         <div className="nb-info-group">
           <span className="nb-info-icon"><ClockIcon /></span>
           <div>
@@ -727,7 +801,7 @@ const Navbar: React.FC = () => {
         </div>
       </div>
 
-      {/* ===== MAIN NAV BAR ===== */}
+      {/* ===== MAIN NAV BAR — hidden on mobile ===== */}
       <div className="nb-mainbar">
         <ul className="nb-nav">
           {NAV_ITEMS.map(item => (
@@ -740,7 +814,7 @@ const Navbar: React.FC = () => {
                 {item.star && <span className="nb-star">★</span>}
               </button>
 
-              {/* Standard Dropdown — shown on hover via CSS */}
+              {/* Standard Dropdown */}
               {item.dropdown && item.dropdown.length > 0 && (
                 <div className="nb-dropdown">
                   <ul>
@@ -827,6 +901,26 @@ const Navbar: React.FC = () => {
 
       {/* ===== HAMBURGER SLIDE MENU ===== */}
       <div className={`nb-mega${menuOpen ? " open" : ""}`}>
+
+        {/* Mobile contact info — shown when info-group pills are hidden */}
+        <div className="nb-mega-mobile-info">
+          <div className="nb-mega-mobile-info-row">
+            <ClockIcon />
+            <div>
+              <div className="nb-mega-mobile-info-main">9:00 – 18:00</div>
+              <div className="nb-mega-mobile-info-sub">Mon – Sat, Office Hours</div>
+            </div>
+          </div>
+          <div className="nb-mega-mobile-info-row">
+            <PhoneIcon />
+            <div>
+              <div className="nb-mega-mobile-info-main">03009209003</div>
+              <div className="nb-mega-mobile-info-sub">Free Consultation</div>
+            </div>
+          </div>
+        </div>
+
+        {/* Nav links */}
         <ul className="nb-mega-list">
           {NAV_ITEMS.map(item => (
             <li key={item.label} className="nb-mega-item">
@@ -840,6 +934,17 @@ const Navbar: React.FC = () => {
             </li>
           ))}
         </ul>
+
+        {/* Mobile CTA buttons — shown when desktop CTAs are hidden */}
+        <div className="nb-mega-mobile-ctas">
+          <button className="nb-mega-mobile-btn outline">
+            <ScaleIcon /> Case Review
+          </button>
+          <button className="nb-mega-mobile-btn primary">
+            Free Evaluation <ArrowIcon />
+          </button>
+        </div>
+
         <div className="nb-mega-footer">
           <span className="nb-mega-footer-copy">© 2025 Amin Law Associates. All rights reserved.</span>
           <div className="nb-mega-socials">
