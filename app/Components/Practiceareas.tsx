@@ -507,7 +507,7 @@ export default function PracticeAreas() {
           }}>
             <div style={{ width: 40, height: 1, background: C.gold, flexShrink: 0 }} />
             <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 10, letterSpacing: "4px", textTransform: "uppercase", color: C.gold }}>
-              Harlow & Associates · Practice Areas
+              Amin Law Associates · Practice Areas
             </span>
           </div>
           <h1 style={{

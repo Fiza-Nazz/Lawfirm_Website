@@ -11,6 +11,7 @@ const expertiseItems = [
     accent: "#b8943f",
     desc: "Comprehensive counsel on banking regulations, financial transactions, compliance frameworks, and dispute resolution for financial institutions and corporate clients.",
     stat: "200+ Cases",
+    sectionId: "banking-law",
   },
   {
     num: "02",
@@ -20,6 +21,7 @@ const expertiseItems = [
     accent: "#1b4d3e",
     desc: "Navigating complex healthcare regulations, medical malpractice defense, HIPAA compliance, and hospital-physician agreements with precision and care.",
     stat: "150+ Clients",
+    sectionId: "health-law",
   },
   {
     num: "03",
@@ -29,6 +31,7 @@ const expertiseItems = [
     accent: "#b8943f",
     desc: "Expert representation in property acquisitions, commercial leasing, zoning disputes, title examinations, and real estate development projects.",
     stat: "$2B+ Deals",
+    sectionId: "real-estate",
   },
   {
     num: "04",
@@ -38,6 +41,7 @@ const expertiseItems = [
     accent: "#1b4d3e",
     desc: "Strategic advice on IPOs, mergers, acquisitions, debt offerings, and securities regulations for public and private companies seeking capital market access.",
     stat: "50+ IPOs",
+    sectionId: "capital-markets",
   },
   {
     num: "05",
@@ -47,6 +51,7 @@ const expertiseItems = [
     accent: "#b8943f",
     desc: "Comprehensive corporate legal services including formation, governance, contracts, shareholder agreements, and regulatory compliance for businesses of all sizes.",
     stat: "500+ Firms",
+    sectionId: "corporate-law",
   },
   {
     num: "06",
@@ -56,15 +61,17 @@ const expertiseItems = [
     accent: "#1b4d3e",
     desc: "Strategic tax planning, dispute resolution with revenue authorities, cross-border tax structuring, and compliance advisory for individuals and corporations.",
     stat: "98% Success",
+    sectionId: "tax-law",
   },
   {
     num: "07",
     title: "Civil Litigation",
     sub: "Common Law",
-    image: "/civil.png",
+    image: "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=800&q=90&fit=crop",
     accent: "#b8943f",
     desc: "Skilled advocacy in civil litigation matters, contract disputes, tortious claims, and appellate proceedings across all levels of the court system.",
     stat: "1000+ Wins",
+    sectionId: "civil-litigation",
   },
   {
     num: "08",
@@ -74,6 +81,17 @@ const expertiseItems = [
     accent: "#1b4d3e",
     desc: "Protecting employer and employee rights through employment contracts, workplace disputes, unfair dismissal claims, and regulatory compliance guidance.",
     stat: "30+ Years",
+    sectionId: "labour-law",
+  },
+  {
+    num: "09",
+    title: "Personal Injury",
+    sub: "Tort & Compensation",
+    image: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=800&q=90&fit=crop",
+    accent: "#b8943f",
+    desc: "Dedicated representation for personal injury victims seeking rightful compensation for accidents, negligence, workplace injuries, and medical malpractice claims.",
+    stat: "95% Win Rate",
+    sectionId: "personal-injury",
   },
 ];
 
@@ -134,7 +152,16 @@ function Modal({ item, onClose }: { item: typeof expertiseItems[0] | null; onClo
             </div>
           </div>
 
-          <button className="modal-cta">
+          <button
+            className="modal-cta"
+            onClick={() => {
+              onClose();
+              setTimeout(() => {
+                const el = document.getElementById(item.sectionId);
+                if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
+              }, 300);
+            }}
+          >
             Schedule a Consultation
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
               <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
@@ -147,7 +174,17 @@ function Modal({ item, onClose }: { item: typeof expertiseItems[0] | null; onClo
 }
 
 /* ─── CARD ─── */
-function Card({ item, onClick, index }: { item: typeof expertiseItems[0]; onClick: () => void; index: number }) {
+function Card({
+  item,
+  onClick,
+  index,
+  highlighted,
+}: {
+  item: typeof expertiseItems[0];
+  onClick: () => void;
+  index: number;
+  highlighted: boolean;
+}) {
   const [hovered, setHovered] = useState(false);
   const [tilt, setTilt] = useState({ x: 0, y: 0, shine: { x: 50, y: 50 } });
   const ref = useRef<HTMLDivElement>(null);
@@ -176,10 +213,13 @@ function Card({ item, onClick, index }: { item: typeof expertiseItems[0]; onClic
 
   return (
     <div
+      id={item.sectionId}
       ref={ref}
-      className={`ex-card${hovered ? " ex-card--on" : ""}`}
+      className={`ex-card${hovered ? " ex-card--on" : ""}${highlighted ? " ex-card--highlight" : ""}`}
       style={{
-        transform: hovered
+        transform: highlighted
+          ? "perspective(1000px) rotateX(0) rotateY(0) translateY(0) scale(1)"
+          : hovered
           ? `perspective(1000px) rotateX(${tilt.y}deg) rotateY(${tilt.x}deg) translateY(-10px) scale(1.02)`
           : "perspective(1000px) rotateX(0) rotateY(0) translateY(0) scale(1)",
         animationDelay: `${index * 80}ms`,
@@ -225,7 +265,7 @@ function Card({ item, onClick, index }: { item: typeof expertiseItems[0]; onClic
         </div>
       </div>
 
-      <div className={`ex-card-bar${hovered ? " on" : ""}`} />
+      <div className={`ex-card-bar${hovered || highlighted ? " on" : ""}`} />
     </div>
   );
 }
@@ -234,7 +274,36 @@ function Card({ item, onClick, index }: { item: typeof expertiseItems[0]; onClic
 export default function Expertise() {
   const [active, setActive] = useState<typeof expertiseItems[0] | null>(null);
   const [visible, setVisible] = useState(false);
+  const [highlightedId, setHighlightedId] = useState<string | null>(null);
   const sectionRef = useRef<HTMLElement>(null);
+
+  // Handle URL hash navigation — scroll to card + highlight it
+  useEffect(() => {
+    const handleHash = () => {
+      const hash = window.location.hash.replace("#", "");
+      if (!hash) return;
+      const matched = expertiseItems.find((item) => item.sectionId === hash);
+      if (!matched) return;
+
+      // Small delay so DOM is ready
+      setTimeout(() => {
+        const el = document.getElementById(hash);
+        if (el) {
+          el.scrollIntoView({ behavior: "smooth", block: "center" });
+          // Trigger highlight + vibrate animation
+          setHighlightedId(hash);
+          setTimeout(() => setHighlightedId(null), 2200);
+        }
+      }, 150);
+    };
+
+    // Run on mount (for direct URL load)
+    handleHash();
+
+    // Run on hash change (for same-page links)
+    window.addEventListener("hashchange", handleHash);
+    return () => window.removeEventListener("hashchange", handleHash);
+  }, []);
 
   useEffect(() => {
     const obs = new IntersectionObserver(
@@ -266,9 +335,19 @@ export default function Expertise() {
 
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+        /* ── Force white background everywhere ── */
+        html, body {
+          background: #ffffff !important;
+          min-height: 100vh;
+        }
+
+        #__next, [data-nextjs-scroll-focus-boundary], main {
+          background: #ffffff !important;
+        }
+
         /* ─── SECTION WRAPPER ─── */
         .ex-wrap {
-          background: #ffffff;
+          background: #ffffff !important;
           font-family: 'DM Sans', sans-serif;
           padding: 80px 48px 96px;
           max-width: 1200px;
@@ -356,9 +435,7 @@ export default function Expertise() {
 
         @keyframes underlineIn { to { transform: scaleX(1); } }
 
-        .ex-right {
-          text-align: right;
-        }
+        .ex-right { text-align: right; }
 
         .ex-count {
           font-family: 'Bebas Neue', sans-serif;
@@ -398,7 +475,7 @@ export default function Expertise() {
         /* ─── CARD ─── */
         .ex-card {
           position: relative;
-          background: #fff;
+          background: #ffffff;
           border: 1px solid var(--border);
           cursor: pointer;
           overflow: hidden;
@@ -420,6 +497,50 @@ export default function Expertise() {
           border-color: rgba(184,148,63,0.4);
           box-shadow: var(--card-shadow);
           z-index: 2;
+        }
+
+        /* ── HIGHLIGHT: card targeted via URL hash ── */
+        .ex-card--highlight {
+          border-color: var(--gold) !important;
+          box-shadow: 0 0 0 3px rgba(184,148,63,0.35), var(--card-shadow) !important;
+          z-index: 10;
+          animation:
+            cardReveal 0.65s cubic-bezier(0.23, 1, 0.32, 1) both,
+            cardHighlightRotate 0.5s 0.3s cubic-bezier(0.23, 1, 0.32, 1) both,
+            cardVibrate 0.4s 0.85s ease both,
+            cardGlow 2s 0.3s ease both;
+        }
+
+        @keyframes cardHighlightRotate {
+          0%   { transform: perspective(1000px) rotateY(0deg) scale(1); }
+          30%  { transform: perspective(1000px) rotateY(8deg) scale(1.04); }
+          60%  { transform: perspective(1000px) rotateY(-5deg) scale(1.03); }
+          100% { transform: perspective(1000px) rotateY(0deg) scale(1.02); }
+        }
+
+        @keyframes cardVibrate {
+          0%   { transform: perspective(1000px) rotateY(0deg) scale(1.02) translateX(0); }
+          15%  { transform: perspective(1000px) rotateY(0deg) scale(1.02) translateX(-5px); }
+          30%  { transform: perspective(1000px) rotateY(0deg) scale(1.02) translateX(5px); }
+          45%  { transform: perspective(1000px) rotateY(0deg) scale(1.02) translateX(-4px); }
+          60%  { transform: perspective(1000px) rotateY(0deg) scale(1.02) translateX(3px); }
+          75%  { transform: perspective(1000px) rotateY(0deg) scale(1.02) translateX(-2px); }
+          100% { transform: perspective(1000px) rotateY(0deg) scale(1) translateX(0); }
+        }
+
+        @keyframes cardGlow {
+          0%   { box-shadow: 0 0 0 3px rgba(184,148,63,0.35), var(--card-shadow); }
+          25%  { box-shadow: 0 0 0 6px rgba(184,148,63,0.5), 0 0 40px rgba(184,148,63,0.3), var(--card-shadow); }
+          60%  { box-shadow: 0 0 0 4px rgba(184,148,63,0.4), 0 0 20px rgba(184,148,63,0.2), var(--card-shadow); }
+          100% { box-shadow: 0 0 0 2px rgba(184,148,63,0.2), var(--card-shadow); }
+        }
+
+        .ex-card--highlight .ex-card-title {
+          color: var(--teal);
+        }
+
+        .ex-card--highlight .ex-card-bar {
+          transform: scaleX(1) !important;
         }
 
         .ex-card-gloss {
@@ -471,7 +592,8 @@ export default function Expertise() {
           filter: brightness(0.92) saturate(1.05);
         }
 
-        .ex-card--on .ex-card-img {
+        .ex-card--on .ex-card-img,
+        .ex-card--highlight .ex-card-img {
           transform: scale(1.1);
           filter: brightness(0.75) saturate(1.15);
         }
@@ -509,7 +631,7 @@ export default function Expertise() {
         .ex-card-body {
           padding: 20px 20px 22px;
           position: relative;
-          background: #fff;
+          background: #ffffff;
         }
 
         .ex-card-meta {
@@ -787,9 +909,7 @@ export default function Expertise() {
           font-family: 'DM Sans', sans-serif;
         }
 
-        .modal-body {
-          padding: 24px 28px 32px;
-        }
+        .modal-body { padding: 24px 28px 32px; }
 
         .modal-tag {
           display: inline-block;
@@ -884,13 +1004,10 @@ export default function Expertise() {
         /* ═══════════════════════════════════════
            RESPONSIVE BREAKPOINTS
         ═══════════════════════════════════════ */
-
-        /* Large tablets */
         @media (max-width: 1100px) {
           .ex-grid { grid-template-columns: repeat(3, 1fr); }
         }
 
-        /* Tablets / small laptops */
         @media (max-width: 900px) {
           .ex-wrap { padding: 56px 32px 72px; }
           .ex-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
@@ -904,7 +1021,6 @@ export default function Expertise() {
           .ex-footer-actions { justify-content: center; }
         }
 
-        /* Mobile landscape / large phones */
         @media (max-width: 600px) {
           .ex-wrap { padding: 40px 16px 56px; }
           .ex-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
@@ -917,7 +1033,6 @@ export default function Expertise() {
           .modal-body { padding: 18px 18px 24px; }
         }
 
-        /* Small phones */
         @media (max-width: 420px) {
           .ex-wrap { padding: 32px 12px 48px; }
           .ex-grid { grid-template-columns: 1fr; gap: 12px; }
@@ -940,7 +1055,9 @@ export default function Expertise() {
             </h2>
           </div>
           <div className="ex-right">
-            <div className="ex-count" data-num="08">08</div>
+            <div className="ex-count" data-num={String(expertiseItems.length).padStart(2, "0")}>
+              {String(expertiseItems.length).padStart(2, "0")}
+            </div>
             <div className="ex-count-label">Legal Specializations<br />Serving Since 1992</div>
           </div>
         </div>
@@ -948,7 +1065,13 @@ export default function Expertise() {
         {/* ── Grid ── */}
         <div className="ex-grid">
           {expertiseItems.map((item, i) => (
-            <Card key={i} item={item} index={i} onClick={() => setActive(item)} />
+            <Card
+              key={item.sectionId}
+              item={item}
+              index={i}
+              onClick={() => setActive(item)}
+              highlighted={highlightedId === item.sectionId}
+            />
           ))}
         </div>
 

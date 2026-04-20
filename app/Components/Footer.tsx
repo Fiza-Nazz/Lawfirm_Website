@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 interface PracticeArea {
   label: string;
   href: string;
+  cardId: string; // direct card ID in Expertise section
 }
 interface QuickLink {
   label: string;
@@ -12,27 +13,66 @@ interface QuickLink {
 }
 
 // ─── Data ─────────────────────────────────────────────────────────────────────
+// cardId must match sectionId in expertiseItems exactly
 const practiceAreas: PracticeArea[] = [
-  { label: "Personal Injury", href: "#" },
-  { label: "Medical Malpractice", href: "#" },
-  { label: "Car Accidents", href: "#" },
-  { label: "Workers Compensation", href: "#" },
-  { label: "Wrongful Death", href: "#" },
-  { label: "Product Liability", href: "#" },
-  { label: "Slip & Fall", href: "#" },
-  { label: "Brain Injuries", href: "#" },
+  { label: "Personal Injury",      href: "/#personal-injury",      cardId: "personal-injury" },
+  { label: "Medical Malpractice",  href: "/#health-law",           cardId: "health-law" },
+  { label: "Car Accidents",        href: "/#civil-litigation",     cardId: "civil-litigation" },
+  { label: "Workers Compensation", href: "/#labour-law",           cardId: "labour-law" },
+  { label: "Wrongful Death",       href: "/#civil-litigation",     cardId: "civil-litigation" },
+  { label: "Product Liability",    href: "/#corporate-law",        cardId: "corporate-law" },
+  { label: "Slip & Fall",          href: "/#personal-injury",      cardId: "personal-injury" },
+  { label: "Brain Injuries",       href: "/#health-law",           cardId: "health-law" },
 ];
 
 const quickLinks: QuickLink[] = [
-  { label: "About Our Firm", href: "#" },
-  { label: "Our Attorneys", href: "#" },
-  { label: "Case Results", href: "#" },
-  { label: "Client Testimonials", href: "#" },
-  { label: "Free Consultation", href: "#" },
-  { label: "Blog & News", href: "/blog" },
-  { label: "FAQ", href: "#" },
-  { label: "Contact Us", href: "#" },
+  { label: "About Our Firm",   href: "/#about" },
+  { label: "Lawyer",           href: "/#lawer" },
+  { label: "Law",              href: "/#Law" },
+  { label: "Expertise",        href: "/#expertise" },
+  { label: "Practice Areas",   href: "/#practiceareas" },
+  { label: "Evaluation",       href: "/#evualtion" },
+  { label: "Testimonials",     href: "/#testimonials" },
+  { label: "Free Consultation",href: "/#consultation" },
+  { label: "Contact Us",       href: "/#contact" },
 ];
+
+// ─── Smooth Scroll + Card Highlight Handler ───────────────────────────────────
+function navigateToCard(cardId: string) {
+  const el = document.getElementById(cardId);
+  if (!el) return;
+
+  // Scroll card into view
+  el.scrollIntoView({ behavior: "smooth", block: "center" });
+
+  // Trigger highlight: add class, fire hashchange so Expertise picks it up
+  // We update the hash which Expertise listens to via hashchange event
+  const newUrl = `${window.location.pathname}${window.location.search}#${cardId}`;
+  window.history.pushState(null, "", newUrl);
+  // Manually dispatch hashchange since pushState doesn't fire it
+  window.dispatchEvent(new HashChangeEvent("hashchange"));
+}
+
+function handleNavClick(
+  e: React.MouseEvent<HTMLAnchorElement>,
+  href: string,
+  cardId?: string
+) {
+  if (!href.startsWith("/#")) return;
+
+  e.preventDefault();
+
+  if (cardId) {
+    // Navigate directly to the card with highlight animation
+    navigateToCard(cardId);
+    return;
+  }
+
+  // Normal section scroll
+  const id = href.replace("/#", "");
+  const el = document.getElementById(id);
+  if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+}
 
 // ─── Icons ────────────────────────────────────────────────────────────────────
 const IconPhone = () => (
@@ -235,11 +275,7 @@ export default function Footer() {
           cursor: pointer;
           transition: background 0.25s, transform 0.2s;
         }
-        .f-btn-primary:hover {
-          background: #1D6E58;
-          color: #ffffff !important;
-          transform: translateY(-1px);
-        }
+        .f-btn-primary:hover { background: #1D6E58; color: #ffffff !important; transform: translateY(-1px); }
         .f-btn-primary:visited { color: #ffffff !important; }
 
         .f-btn-outline {
@@ -259,18 +295,12 @@ export default function Footer() {
           cursor: pointer;
           transition: all 0.25s;
         }
-        .f-btn-outline:hover {
-          background: #0D4A3A;
-          color: #ffffff !important;
-        }
+        .f-btn-outline:hover { background: #0D4A3A; color: #ffffff !important; }
         .f-btn-outline:visited { color: #0D4A3A !important; }
         .f-btn-outline:hover:visited { color: #ffffff !important; }
 
         /* ── Stats ── */
-        .f-stats-row {
-          background: #0D4A3A;
-          padding: 56px 24px;
-        }
+        .f-stats-row { background: #0D4A3A; padding: 56px 24px; }
         .f-stats-inner {
           max-width: 1200px;
           margin: 0 auto;
@@ -282,7 +312,6 @@ export default function Footer() {
           text-align: center;
           padding: 20px 16px;
           border-right: 1px solid rgba(255,255,255,0.1);
-          position: relative;
         }
         .f-stat-item:last-child { border-right: none; }
         .f-stat-number {
@@ -317,12 +346,7 @@ export default function Footer() {
         }
 
         /* Logo col */
-        .f-footer-logo {
-          display: flex;
-          align-items: center;
-          gap: 14px;
-          margin-bottom: 24px;
-        }
+        .f-footer-logo { display: flex; align-items: center; gap: 14px; margin-bottom: 24px; }
         .f-footer-logo-icon {
           width: 48px; height: 48px;
           background: #0D4A3A;
@@ -354,11 +378,8 @@ export default function Footer() {
           margin-bottom: 28px;
         }
 
-        /* Social buttons */
-        .f-social-row {
-          display: flex;
-          gap: 10px;
-        }
+        /* Social */
+        .f-social-row { display: flex; gap: 10px; }
         .f-social-btn {
           width: 36px; height: 36px;
           border: 1.5px solid rgba(201,145,58,0.2);
@@ -369,11 +390,7 @@ export default function Footer() {
           text-decoration: none !important;
           background: transparent;
         }
-        .f-social-btn:hover {
-          background: #0D4A3A;
-          border-color: #0D4A3A;
-          color: #ffffff !important;
-        }
+        .f-social-btn:hover { background: #0D4A3A; border-color: #0D4A3A; color: #ffffff !important; }
         .f-social-btn:visited { color: #444444 !important; }
 
         /* Column headings */
@@ -397,13 +414,7 @@ export default function Footer() {
         }
 
         /* Links */
-        .f-link-list {
-          list-style: none;
-          padding: 0; margin: 0;
-          display: flex;
-          flex-direction: column;
-          gap: 10px;
-        }
+        .f-link-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px; }
         .f-link-list li a {
           font-family: 'Raleway', sans-serif;
           font-size: 13px;
@@ -413,29 +424,17 @@ export default function Footer() {
           align-items: center;
           gap: 8px;
           transition: color 0.2s, gap 0.2s;
+          cursor: pointer;
         }
         .f-link-list li a:visited { color: #444444 !important; }
         .f-link-list li a:hover { color: #0D4A3A !important; gap: 12px; }
         .f-link-list li a:hover:visited { color: #0D4A3A !important; }
-        .f-link-list li a svg {
-          opacity: 0.5;
-          transition: opacity 0.2s;
-          flex-shrink: 0;
-          color: #444444;
-        }
+        .f-link-list li a svg { opacity: 0.5; transition: opacity 0.2s; flex-shrink: 0; color: #444444; }
         .f-link-list li a:hover svg { opacity: 1; color: #C9913A; }
 
-        /* Contact info */
-        .f-contact-list {
-          display: flex;
-          flex-direction: column;
-          gap: 16px;
-        }
-        .f-contact-item {
-          display: flex;
-          align-items: flex-start;
-          gap: 14px;
-        }
+        /* Contact */
+        .f-contact-list { display: flex; flex-direction: column; gap: 16px; }
+        .f-contact-item { display: flex; align-items: flex-start; gap: 14px; }
         .f-contact-icon {
           width: 36px; height: 36px;
           background: rgba(13,74,58,0.06);
@@ -445,11 +444,7 @@ export default function Footer() {
           flex-shrink: 0;
           transition: all 0.2s;
         }
-        .f-contact-item:hover .f-contact-icon {
-          background: #0D4A3A;
-          color: #ffffff;
-          border-color: #0D4A3A;
-        }
+        .f-contact-item:hover .f-contact-icon { background: #0D4A3A; color: #ffffff; border-color: #0D4A3A; }
         .f-contact-text-label {
           font-family: 'Raleway', sans-serif;
           font-size: 10px;
@@ -472,29 +467,10 @@ export default function Footer() {
         a.f-contact-text-value:hover { color: #0D4A3A !important; }
 
         /* Newsletter */
-        .f-newsletter-box {
-          background: #0D4A3A;
-          padding: 28px;
-          margin-top: 32px;
-        }
-        .f-newsletter-title {
-          font-family: 'Cormorant Garamond', serif;
-          font-size: 18px;
-          font-weight: 600;
-          color: #ffffff !important;
-          margin-bottom: 6px;
-        }
-        .f-newsletter-sub {
-          font-family: 'Raleway', sans-serif;
-          font-size: 12px;
-          color: rgba(255,255,255,0.6) !important;
-          margin-bottom: 16px;
-          line-height: 1.6;
-        }
-        .f-newsletter-form {
-          display: flex;
-          gap: 0;
-        }
+        .f-newsletter-box { background: #0D4A3A; padding: 28px; margin-top: 32px; }
+        .f-newsletter-title { font-family: 'Cormorant Garamond', serif; font-size: 18px; font-weight: 600; color: #ffffff !important; margin-bottom: 6px; }
+        .f-newsletter-sub { font-family: 'Raleway', sans-serif; font-size: 12px; color: rgba(255,255,255,0.6) !important; margin-bottom: 16px; line-height: 1.6; }
+        .f-newsletter-form { display: flex; gap: 0; }
         .f-newsletter-input {
           flex: 1;
           padding: 11px 14px;
@@ -520,26 +496,13 @@ export default function Footer() {
           flex-shrink: 0;
         }
         .f-newsletter-btn:hover { background: #E0A84E; }
-        .f-subscribed-msg {
-          font-family: 'Raleway', sans-serif;
-          font-size: 12px;
-          color: #F0C880 !important;
-          padding: 8px 0;
-        }
+        .f-subscribed-msg { font-family: 'Raleway', sans-serif; font-size: 12px; color: #F0C880 !important; padding: 8px 0; }
 
         /* Divider */
-        .f-footer-divider {
-          max-width: 1200px;
-          margin: 50px auto 0;
-          border: none;
-          border-top: 1px solid rgba(0,0,0,0.07);
-        }
+        .f-footer-divider { max-width: 1200px; margin: 50px auto 0; border: none; border-top: 1px solid rgba(0,0,0,0.07); }
 
-        /* ── Bottom Bar ── */
-        .f-footer-bottom {
-          background: #0D4A3A;
-          padding: 18px 24px;
-        }
+        /* Bottom Bar */
+        .f-footer-bottom { background: #0D4A3A; padding: 18px 24px; }
         .f-footer-bottom-inner {
           max-width: 1200px;
           margin: 0 auto;
@@ -549,16 +512,8 @@ export default function Footer() {
           flex-wrap: wrap;
           gap: 12px;
         }
-        .f-footer-copy {
-          font-family: 'Raleway', sans-serif;
-          font-size: 11.5px;
-          color: rgba(255,255,255,0.5) !important;
-        }
-        .f-footer-legal-links {
-          display: flex;
-          gap: 20px;
-          flex-wrap: wrap;
-        }
+        .f-footer-copy { font-family: 'Raleway', sans-serif; font-size: 11.5px; color: rgba(255,255,255,0.5) !important; }
+        .f-footer-legal-links { display: flex; gap: 20px; flex-wrap: wrap; }
         .f-footer-legal-links a {
           font-family: 'Raleway', sans-serif;
           font-size: 11px;
@@ -572,7 +527,7 @@ export default function Footer() {
         .f-footer-legal-links a:visited { color: rgba(255,255,255,0.55) !important; }
         .f-footer-legal-links a:hover { color: #E0A84E !important; }
 
-        /* ── Back to Top ── */
+        /* Back to Top */
         .f-back-to-top {
           position: fixed;
           bottom: 28px; right: 28px;
@@ -587,52 +542,29 @@ export default function Footer() {
           transition: opacity 0.3s, transform 0.3s;
           z-index: 999;
         }
-        .f-back-to-top.f-visible {
-          opacity: 1;
-          transform: translateY(0);
-        }
+        .f-back-to-top.f-visible { opacity: 1; transform: translateY(0); }
         .f-back-to-top:hover { background: #1D6E58; }
 
-        /* ── Responsive ── */
+        /* Responsive */
         @media (max-width: 1024px) {
-          .f-footer-grid {
-            grid-template-columns: 1fr 1fr;
-            gap: 40px 48px;
-          }
-          .f-stats-inner {
-            grid-template-columns: repeat(2, 1fr);
-          }
+          .f-footer-grid { grid-template-columns: 1fr 1fr; gap: 40px 48px; }
+          .f-stats-inner { grid-template-columns: repeat(2, 1fr); }
           .f-stat-item:nth-child(2) { border-right: none; }
           .f-stat-item:nth-child(3) { border-right: 1px solid rgba(255,255,255,0.1); }
-          .f-stat-item:nth-child(1),
-          .f-stat-item:nth-child(2) {
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            padding-bottom: 30px;
-          }
-          .f-stat-item:nth-child(3),
-          .f-stat-item:nth-child(4) {
-            padding-top: 30px;
-          }
+          .f-stat-item:nth-child(1), .f-stat-item:nth-child(2) { border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 30px; }
+          .f-stat-item:nth-child(3), .f-stat-item:nth-child(4) { padding-top: 30px; }
         }
-
         @media (max-width: 768px) {
-          .f-cta-inner {
-            grid-template-columns: 1fr;
-            text-align: center;
-          }
+          .f-cta-inner { grid-template-columns: 1fr; text-align: center; }
           .f-cta-eyebrow { justify-content: center; }
           .f-cta-actions { justify-content: center; }
-          .f-footer-grid {
-            grid-template-columns: 1fr;
-            gap: 40px;
-          }
+          .f-footer-grid { grid-template-columns: 1fr; gap: 40px; }
           .f-footer-main { padding: 56px 20px 40px; }
           .f-footer-bottom-inner { flex-direction: column; text-align: center; }
           .f-footer-legal-links { justify-content: center; }
           .f-newsletter-form { flex-direction: column; gap: 8px; }
           .f-newsletter-input { border-right: 1px solid rgba(255,255,255,0.2); }
         }
-
         @media (max-width: 480px) {
           .f-stats-inner { grid-template-columns: 1fr; }
           .f-stat-item { border-right: none !important; border-bottom: 1px solid rgba(255,255,255,0.1); }
@@ -672,7 +604,11 @@ export default function Footer() {
               <a href="tel:03009209003" className="f-btn-primary">
                 <IconPhone /> Call Now
               </a>
-              <a href="#" className="f-btn-outline">
+              <a
+                href="/#evualtion"
+                className="f-btn-outline"
+                onClick={(e) => handleNavClick(e, "/#evualtion")}
+              >
                 Free Consultation <IconArrow />
               </a>
             </div>
@@ -683,9 +619,9 @@ export default function Footer() {
         <div className="f-stats-row">
           <div className="f-stats-inner">
             <AnimatedStat end={15000} suffix="+" label="Cases Won" />
-            <AnimatedStat end={500} suffix="M+" label="Recovered ($)" />
-            <AnimatedStat end={25} suffix="+" label="Years Experience" />
-            <AnimatedStat end={98} suffix="%" label="Client Satisfaction" />
+            <AnimatedStat end={500}   suffix="M+" label="Recovered ($)" />
+            <AnimatedStat end={25}    suffix="+" label="Years Experience" />
+            <AnimatedStat end={98}    suffix="%" label="Client Satisfaction" />
           </div>
         </div>
 
@@ -710,7 +646,7 @@ export default function Footer() {
                 With over two decades of dedicated legal service in Karachi, our attorneys fight relentlessly to protect your rights and secure the compensation you deserve. No fees until we win your case.
               </p>
               <div className="f-social-row">
-                <a href="https://www.facebook.com/people/Amin-law-Associates/61569270775405/" className="f-social-btn" aria-label="Facebook">
+                <a href="https://www.facebook.com/people/Amin-law-Associates/61569270775405/" className="f-social-btn" aria-label="Facebook" target="_blank" rel="noopener noreferrer">
                   <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>
                 </a>
                 <a href="#" className="f-social-btn" aria-label="Instagram">
@@ -719,19 +655,22 @@ export default function Footer() {
                 <a href="#" className="f-social-btn" aria-label="LinkedIn">
                   <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
                 </a>
-                <a href="https://wa.me/923009209003" className="f-social-btn" aria-label="WhatsApp">
+                <a href="https://wa.me/923009209003" className="f-social-btn" aria-label="WhatsApp" target="_blank" rel="noopener noreferrer">
                   <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
                 </a>
               </div>
             </div>
 
-            {/* Col 2 — Practice Areas */}
+            {/* Col 2 — Practice Areas (each links directly to its card) */}
             <div>
               <h3 className="f-col-heading">Practice Areas</h3>
               <ul className="f-link-list">
                 {practiceAreas.map((a) => (
                   <li key={a.label}>
-                    <a href={a.href}>
+                    <a
+                      href={a.href}
+                      onClick={(e) => handleNavClick(e, a.href, a.cardId)}
+                    >
                       <IconChevronRight />
                       {a.label}
                     </a>
@@ -746,7 +685,10 @@ export default function Footer() {
               <ul className="f-link-list">
                 {quickLinks.map((l) => (
                   <li key={l.label}>
-                    <a href={l.href}>
+                    <a
+                      href={l.href}
+                      onClick={(e) => handleNavClick(e, l.href)}
+                    >
                       <IconChevronRight />
                       {l.label}
                     </a>
@@ -835,10 +777,10 @@ export default function Footer() {
               © {new Date().getFullYear()} Amin Law Associates, Karachi. All rights reserved.
             </p>
             <nav className="f-footer-legal-links">
-              <a href="#">Privacy Policy</a>
-              <a href="#">Terms of Service</a>
-              <a href="#">Disclaimer</a>
-              <a href="#">Sitemap</a>
+             <a href="/privacy-policy">Privacy Policy</a>
+             <a href="/terms-of-service">Terms of Service</a>
+             <a href="/disclaimer">Disclaimer</a>
+             <a href="/sitemap">Sitemap</a>
             </nav>
           </div>
         </div>

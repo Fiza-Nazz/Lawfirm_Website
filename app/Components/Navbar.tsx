@@ -907,7 +907,7 @@ const Navbar: React.FC = () => {
           <div className="nb-mega-mobile-info-row">
             <ClockIcon />
             <div>
-              <div className="nb-mega-mobile-info-main">9:00 – 18:00</div>
+              <div className="nb-mega-mobile-info-main">12:00pm – 11:00pm</div>
               <div className="nb-mega-mobile-info-sub">Mon – Sat, Office Hours</div>
             </div>
           </div>

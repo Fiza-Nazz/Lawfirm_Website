@@ -669,13 +669,13 @@ export default function About() {
         <div className="hero-bg" />
         <div className="hero-overlay" />
         <div className="hero-content">
-          <p className="hero-eyebrow">Established 1999 · Excellence in Law</p>
+          <p className="hero-eyebrow">Established 2000 · Excellence in Law</p>
           <h1 className="hero-title">
             Justice is not a<br />
             privilege — it&apos;s a <em>right.</em>
           </h1>
           <p className="hero-desc">
-            For over two decades, Harlow &amp; Associates has stood as a beacon of legal excellence — protecting individuals, families, and businesses with unwavering dedication.
+            For over two decades, Amin Law &amp; Associates has stood as a beacon of legal excellence — protecting individuals, families, and businesses with unwavering dedication.
           </p>
         </div>
         <div className="hero-divider" />
@@ -726,7 +726,7 @@ export default function About() {
               A Legacy Built on <em>Truth</em> &amp; Tenacity
             </h2>
             <p>
-              Harlow &amp; Associates was founded in 1999 with a singular mission — to deliver world-class legal representation without compromise. What began as a two-attorney practice has grown into one of the region&apos;s most respected full-service law firms.
+              Amin Law &amp; Associates was founded in 2000 with a singular mission — to deliver world-class legal representation without compromise. What began as a two-attorney practice has grown into one of the region&apos;s most respected full-service law firms.
             </p>
             <p>
               We handle matters ranging from personal injury and criminal defense to corporate litigation and bankruptcy — always with precision, always with purpose.

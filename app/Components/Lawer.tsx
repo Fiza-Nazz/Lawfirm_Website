@@ -18,7 +18,6 @@ export default function LawyerSection() {
           overflow: hidden;
         }
 
-        /* Lady Justice image watermark on the left */
         .justice-watermark {
           position: absolute;
           left: 0;
@@ -49,7 +48,6 @@ export default function LawyerSection() {
           z-index: 1;
         }
 
-        /* Top row: heading left, drop-cap paragraph right */
         .top-row {
           display: grid;
           grid-template-columns: 320px 1fr;
@@ -67,7 +65,6 @@ export default function LawyerSection() {
           letter-spacing: -0.01em;
         }
 
-        /* Drop-cap paragraph */
         .dropcap-para {
           font-family: 'Lora', serif;
           font-size: 0.93rem;
@@ -92,7 +89,6 @@ export default function LawyerSection() {
           text-decoration: underline;
         }
 
-        /* Images row */
         .images-row {
           display: grid;
           grid-template-columns: 1fr 1fr;
@@ -117,7 +113,6 @@ export default function LawyerSection() {
           transform: scale(1.04);
         }
 
-        /* Captions */
         .captions-row {
           display: grid;
           grid-template-columns: 1fr 1fr;
@@ -134,7 +129,6 @@ export default function LawyerSection() {
           padding-top: 10px;
         }
 
-        /* Bottom paragraph */
         .bottom-para {
           font-family: 'Lora', serif;
           font-size: 0.93rem;
@@ -149,7 +143,6 @@ export default function LawyerSection() {
           text-underline-offset: 2px;
         }
 
-        /* Responsive */
         @media (max-width: 1024px) {
           .lawyer-inner {
             padding: 0 32px 0 32px;
@@ -187,8 +180,7 @@ export default function LawyerSection() {
         }
       `}</style>
 
-      <section className="lawyer-section">
-        {/* skull.png watermark */}
+      <section className="lawyer-section" id="lawer">
         <div className="justice-watermark">
           <img
             className="justice-img"
@@ -201,17 +193,19 @@ export default function LawyerSection() {
           {/* Top row */}
           <div className="top-row">
             <h2 className="section-heading">
-              Experienced Attorneys<br />Professional Approach.
+              Experienced Attorneys,<br />Unwavering<br />Commitment.
             </h2>
             <p className="dropcap-para">
-              Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo{" "}
-              <a href="#">ligula eget dolor.</a> Aenean massa. Cum sociis Theme natoque penatibus et
-              magnis dis parturient montes, nascetur ridiculus mus.{" "}
-              <a href="#">Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus.</a>{" "}
-              Phasellus viverra nulla. Sed non mauris vitae erat consequat auctor eu in elit. Class
-              aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.
-              Mauris in erat justo. Nullam ac urna eu felispibus condimentum sit amet a augue. Sed
-              non neque elit sed.
+              Since its establishment in 2000, Amin Law Associates has been one of Karachi's trusted
+              legal and consultancy firms, built on a foundation of{" "}
+              <a href="/#expertise">integrity, expertise, and results</a>. Founded to serve
+              individuals, families, and businesses across Pakistan, our firm offers a comprehensive
+              range of services spanning Legal Consultation, Tax Advisory, Property Documentation
+              &amp; Registration, Corporate Governance, Civil Litigation, Banking Law, Real Estate,
+              Health Law, and Labour Rights. We believe that every person who walks through our door
+              deserves access to the highest calibre of legal counsel — regardless of the complexity
+              of their matter. Our attorneys combine deep courtroom experience with sharp analytical
+              thinking to deliver outcomes that protect your interests and secure your future.
             </p>
           </div>
 
@@ -220,30 +214,34 @@ export default function LawyerSection() {
             <div className="img-wrapper">
               <img
                 src="/wakeel1.png"
-                alt="Globally Minded - attorneys in meeting"
+                alt="Amin Law Associates attorneys in consultation"
               />
             </div>
             <div className="img-wrapper">
               <img
                 src="/wakeel2.png"
-                alt="Courage to Go Deep - modern architecture"
+                alt="Amin Law Associates legal professionals at work"
               />
             </div>
           </div>
 
           {/* Captions */}
           <div className="captions-row">
-            <p className="img-caption">"Globally Minded"</p>
-            <p className="img-caption">"Courage to Go Deep"</p>
+            <p className="img-caption">"Counsel You Can Trust"</p>
+            <p className="img-caption">"Justice Through Dedication"</p>
           </div>
 
           {/* Bottom paragraph */}
           <p className="bottom-para">
-            <a href="#">Morbi accumsan ipsum venec tellus a odio tincidunt auctor.</a> Sed non
-            mauris vitae erat consequat auctor eu in elit. Class aptent taciti sociosqu ad litora
-            torquent per conubia nostra, per inceptos himenaeos. Mauris in erat justo. Nullam ac
-            urna eu felispibus condimentum sit amet a augue. Sed non neque elit. Sed ut imperdiet
-            nisi. Proin condimentum fermentum am pharetra, erat.
+            <a href="/#contact">Reach us at our Karachi office</a> — Mezzanine Floor, Plot #61
+            Commercial, Jamshaid II, District East — or call us any time on{" "}
+            <a href="tel:03009209003">0300-9209003</a>. Our team operates six days a week with a
+            dedicated 24/7 emergency line, because legal crises rarely follow office hours. Whether
+            you are facing a commercial dispute, need assistance with property documentation,
+            require tax consultation, or are seeking resolution of a civil matter, our senior
+            advocates are prepared to guide you from the first consultation to the final verdict.
+            At Amin Law Associates,{" "}
+            <a href="/#expertise">your legal matter is handled with full professional commitment</a>.
           </p>
         </div>
       </section>
