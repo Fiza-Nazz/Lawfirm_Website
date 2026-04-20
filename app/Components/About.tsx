@@ -37,6 +37,7 @@ const attorneysWithImage = [
     role: "Associate",
     specialty: "Advocate High Court",
     img: "/advocate4.png",
+    clickable: true,
   },
   {
     name: "Zubair Chohan",
@@ -578,6 +579,45 @@ export default function About() {
           transition: opacity 0.4s;
         }
         .attorney-card:hover .attorney-accent { opacity: 1; }
+
+        /* ── MUZAMMIL CLICKABLE BADGE ── */
+        .view-cases-badge {
+          position: absolute;
+          top: 16px; left: 16px;
+          background: ${GOLD};
+          color: #fff;
+          font-family: 'DM Sans', sans-serif;
+          font-size: 10px;
+          letter-spacing: 2px;
+          text-transform: uppercase;
+          padding: 6px 12px;
+          font-weight: 500;
+          z-index: 10;
+          display: flex;
+          align-items: center;
+          gap: 6px;
+        }
+        .muzammil-card {
+          cursor: pointer;
+          outline: none;
+        }
+        .muzammil-card:focus-visible {
+          outline: 2px solid ${GOLD};
+          outline-offset: 2px;
+        }
+        .muzammil-card::after {
+          content: '';
+          position: absolute;
+          inset: 0;
+          border: 2px solid transparent;
+          transition: border-color 0.3s ease;
+          pointer-events: none;
+          z-index: 5;
+        }
+        .muzammil-card:hover::after {
+          border-color: ${GOLD};
+        }
+
         .attorney-name-card {
           background: #fff;
           border: 1px solid #e8e2d9;
@@ -842,20 +882,38 @@ export default function About() {
 
           {/* Attorneys WITH images */}
           <div className="team-grid" style={{ marginBottom: "32px" }}>
-            {attorneysWithImage.map((a, i) => (
-              <div
-                key={i}
-                className={`attorney-card fade-up d${Math.min(i + 1, 4)} ${team.inView ? "visible" : ""}`}
-              >
-                <div className="attorney-accent" />
-                <img src={a.img} alt={a.name} />
-                <div className="attorney-overlay">
-                  <div className="attorney-name">{a.name}</div>
-                  <div className="attorney-role">{a.specialty}</div>
-                  <div className="attorney-spec">{a.role}</div>
+            {attorneysWithImage.map((a, i) => {
+              const isMuzammil = a.clickable === true;
+              return (
+                <div
+                  key={i}
+                  className={`attorney-card fade-up d${Math.min(i + 1, 4)} ${team.inView ? "visible" : ""} ${isMuzammil ? "muzammil-card" : ""}`}
+                  onClick={isMuzammil ? () => router.push("/cases") : undefined}
+                  role={isMuzammil ? "button" : undefined}
+                  tabIndex={isMuzammil ? 0 : undefined}
+                  onKeyDown={
+                    isMuzammil
+                      ? (e) => { if (e.key === "Enter" || e.key === " ") router.push("/cases"); }
+                      : undefined
+                  }
+                  title={isMuzammil ? "View Won Cases" : undefined}
+                  style={isMuzammil ? { cursor: "pointer" } : { cursor: "default" }}
+                >
+                  <div className="attorney-accent" />
+                  {isMuzammil && (
+                    <div className="view-cases-badge">
+                      <span>⚖</span> View Cases
+                    </div>
+                  )}
+                  <img src={a.img} alt={a.name} />
+                  <div className="attorney-overlay">
+                    <div className="attorney-name">{a.name}</div>
+                    <div className="attorney-role">{a.specialty}</div>
+                    <div className="attorney-spec">{a.role}</div>
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
 
           {/* Attorneys WITHOUT images */}
