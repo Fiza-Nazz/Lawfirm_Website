@@ -31,6 +31,9 @@ const attorneysWithImage = [
     role: "Associate",
     specialty: "Advocate High Court",
     img: "/advocate3.png",
+    clickable: true,
+    href: "/ilyas",
+    badgeLabel: "View Profile",
   },
   {
     name: "Muzamil Husaain Metlo",
@@ -38,6 +41,8 @@ const attorneysWithImage = [
     specialty: "Advocate High Court",
     img: "/advocate4.png",
     clickable: true,
+    href: "/cases",
+    badgeLabel: "View Cases",
   },
   {
     name: "Zubair Chohan",
@@ -539,7 +544,7 @@ export default function About() {
         .team-header { margin-bottom: 56px; }
         .team-header h2 { font-size: clamp(2rem, 3vw, 2.8rem); font-weight: 300; }
         .team-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
-        .attorney-card { position: relative; overflow: hidden; cursor: pointer; }
+        .attorney-card { position: relative; overflow: hidden; }
         .attorney-card img {
           width: 100%; height: 360px;
           object-fit: cover; display: block;
@@ -580,8 +585,30 @@ export default function About() {
         }
         .attorney-card:hover .attorney-accent { opacity: 1; }
 
-        /* ── MUZAMMIL CLICKABLE BADGE ── */
-        .view-cases-badge {
+        /* ── CLICKABLE ATTORNEY CARD (shared for Muzammil & Ilyas) ── */
+        .clickable-attorney-card {
+          cursor: pointer;
+          outline: none;
+        }
+        .clickable-attorney-card:focus-visible {
+          outline: 2px solid ${GOLD};
+          outline-offset: 2px;
+        }
+        .clickable-attorney-card::after {
+          content: '';
+          position: absolute;
+          inset: 0;
+          border: 2px solid transparent;
+          transition: border-color 0.3s ease;
+          pointer-events: none;
+          z-index: 5;
+        }
+        .clickable-attorney-card:hover::after {
+          border-color: ${GOLD};
+        }
+
+        /* ── TOP-LEFT BADGE (shared) ── */
+        .attorney-action-badge {
           position: absolute;
           top: 16px; left: 16px;
           background: ${GOLD};
@@ -596,26 +623,6 @@ export default function About() {
           display: flex;
           align-items: center;
           gap: 6px;
-        }
-        .muzammil-card {
-          cursor: pointer;
-          outline: none;
-        }
-        .muzammil-card:focus-visible {
-          outline: 2px solid ${GOLD};
-          outline-offset: 2px;
-        }
-        .muzammil-card::after {
-          content: '';
-          position: absolute;
-          inset: 0;
-          border: 2px solid transparent;
-          transition: border-color 0.3s ease;
-          pointer-events: none;
-          z-index: 5;
-        }
-        .muzammil-card:hover::after {
-          border-color: ${GOLD};
         }
 
         .attorney-name-card {
@@ -883,26 +890,28 @@ export default function About() {
           {/* Attorneys WITH images */}
           <div className="team-grid" style={{ marginBottom: "32px" }}>
             {attorneysWithImage.map((a, i) => {
-              const isMuzammil = a.clickable === true;
+              const isClickable = a.clickable === true;
               return (
                 <div
                   key={i}
-                  className={`attorney-card fade-up d${Math.min(i + 1, 4)} ${team.inView ? "visible" : ""} ${isMuzammil ? "muzammil-card" : ""}`}
-                  onClick={isMuzammil ? () => router.push("/cases") : undefined}
-                  role={isMuzammil ? "button" : undefined}
-                  tabIndex={isMuzammil ? 0 : undefined}
+                  className={`attorney-card fade-up d${Math.min(i + 1, 4)} ${team.inView ? "visible" : ""} ${isClickable ? "clickable-attorney-card" : ""}`}
+                  onClick={isClickable ? () => router.push(a.href!) : undefined}
+                  role={isClickable ? "button" : undefined}
+                  tabIndex={isClickable ? 0 : undefined}
                   onKeyDown={
-                    isMuzammil
-                      ? (e) => { if (e.key === "Enter" || e.key === " ") router.push("/cases"); }
+                    isClickable
+                      ? (e) => {
+                          if (e.key === "Enter" || e.key === " ") router.push(a.href!);
+                        }
                       : undefined
                   }
-                  title={isMuzammil ? "View Won Cases" : undefined}
-                  style={isMuzammil ? { cursor: "pointer" } : { cursor: "default" }}
+                  title={isClickable ? a.badgeLabel : undefined}
+                  style={isClickable ? { cursor: "pointer" } : { cursor: "default" }}
                 >
                   <div className="attorney-accent" />
-                  {isMuzammil && (
-                    <div className="view-cases-badge">
-                      <span>⚖</span> View Cases
+                  {isClickable && (
+                    <div className="attorney-action-badge">
+                      <span>⚖</span> {a.badgeLabel}
                     </div>
                   )}
                   <img src={a.img} alt={a.name} />
