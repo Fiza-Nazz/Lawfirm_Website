@@ -61,7 +61,7 @@ const NAV_STYLES = `
 
   /* ─── LOGO ─── */
   .nb-logo {
-    display: flex; align-items: center;
+    display: flex; align-items: center; gap: 0;
     text-decoration: none; flex-shrink: 0; cursor: pointer;
     transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1);
   }
@@ -89,6 +89,60 @@ const NAV_STYLES = `
     display: block;
   }
   .nb-logo:hover .nb-logo-img { transform: scale(1.07); }
+
+  /* ─── LOGO DIVIDER ─── */
+  .nb-logo-divider {
+    width: 1px;
+    height: 36px;
+    background: linear-gradient(to bottom, transparent, var(--gold), transparent);
+    opacity: 0.45;
+    margin: 0 14px;
+    flex-shrink: 0;
+  }
+  @media (max-width: 480px) { .nb-logo-divider { margin: 0 10px; height: 28px; } }
+
+  /* ─── LOGO TEXT ─── */
+  .nb-logo-text {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    flex-shrink: 0;
+  }
+
+  .nb-logo-name {
+    font-family: 'Cinzel', serif;
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--deeper);
+    letter-spacing: 1.2px;
+    line-height: 1;
+    white-space: nowrap;
+  }
+  .nb-logo-name span { color: var(--gold); }
+
+  .nb-logo-tagline {
+    font-family: 'Outfit', sans-serif;
+    font-size: 7.5px;
+    font-weight: 500;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #999;
+    white-space: nowrap;
+  }
+
+  @media (max-width: 1024px) {
+    .nb-logo-name { font-size: 15px; }
+    .nb-logo-tagline { font-size: 7px; letter-spacing: 2.5px; }
+  }
+  @media (max-width: 768px) {
+    .nb-logo-name { font-size: 13px; letter-spacing: 0.8px; }
+    .nb-logo-tagline { font-size: 6.5px; letter-spacing: 2px; }
+    .nb-logo-divider { margin: 0 10px; }
+  }
+  @media (max-width: 480px) {
+    .nb-logo-name { font-size: 12px; letter-spacing: 0.5px; }
+    .nb-logo-tagline { display: none; }
+  }
 
   .nb-spacer { flex: 1; }
 
@@ -169,7 +223,6 @@ const NAV_STYLES = `
     border-bottom: 2px solid var(--deep);
     position: relative;
     box-shadow: 0 4px 24px rgba(0,0,0,0.07);
-    /* FIX: No overflow-x scroll on mobile */
     overflow: hidden;
   }
   @media (max-width: 1024px) { .nb-mainbar { padding: 0 32px; height: 52px; } }
@@ -177,7 +230,6 @@ const NAV_STYLES = `
     .nb-mainbar {
       padding: 0 16px;
       height: 48px;
-      /* On mobile, hide mainbar — hamburger menu handles navigation */
       display: none;
     }
   }
@@ -194,7 +246,6 @@ const NAV_STYLES = `
     list-style: none;
     flex: 1;
     flex-wrap: nowrap;
-    /* FIX: prevent nav from overflowing */
     min-width: 0;
     overflow: hidden;
   }
@@ -478,7 +529,6 @@ const NAV_STYLES = `
     border-top: 2px solid var(--deep);
     border-bottom: 2px solid rgba(184,152,72,0.2);
     box-shadow: 0 20px 60px rgba(0,0,0,0.15);
-    /* FIX: ensure no horizontal scroll in slide menu */
     width: 100%;
     overflow-x: hidden;
   }
@@ -682,12 +732,12 @@ const NAV_ITEMS: NavItem[] = [
 ];
 
 const Navbar: React.FC = () => {
-  const [menuOpen, setMenuOpen]   = useState(false);
+  const [menuOpen, setMenuOpen]     = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
-  const [scrolled, setScrolled]   = useState(false);
-  const [active, setActive]       = useState("Home");
-  const [searchVal, setSearchVal] = useState("");
-  const searchInputRef            = useRef<HTMLInputElement>(null);
+  const [scrolled, setScrolled]     = useState(false);
+  const [active, setActive]         = useState("Home");
+  const [searchVal, setSearchVal]   = useState("");
+  const searchInputRef              = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -709,7 +759,6 @@ const Navbar: React.FC = () => {
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 
-  // Close menu on outside click
   useEffect(() => {
     if (!menuOpen) return;
     const handler = (e: MouseEvent) => {
@@ -748,14 +797,27 @@ const Navbar: React.FC = () => {
 
       {/* ===== TOP BAR ===== */}
       <div className="nb-topbar">
-        {/* Logo */}
+
+        {/* ── Logo + Firm Name ── */}
         <a className="nb-logo" href="#">
+          {/* Logo image */}
           <div className="nb-logo-emblem">
             <img
               src="/logo.png"
               alt="Amin Law Associates"
               className="nb-logo-img"
             />
+          </div>
+
+          {/* Thin gold divider line between logo and text */}
+          <div className="nb-logo-divider" />
+
+          {/* Firm name + tagline */}
+          <div className="nb-logo-text">
+            <span className="nb-logo-name">
+              Amin <span>Law</span> Associates
+            </span>
+            <span className="nb-logo-tagline">Advocates &amp; Legal Consultants</span>
           </div>
         </a>
 
