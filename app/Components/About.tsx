@@ -58,7 +58,6 @@ const attorneysNameOnly = [
   { name: "Faheem Ali Mangi", role: "Associate", specialty: "Advocate High Court" },
   { name: "Muhammad Haroon Khoso", role: "Associate", specialty: "Advocate High Court" },
   { name: "Muhammad Nasir", role: "Associate", specialty: "Advocate High Court" },
-  { name: "Abid Akram", role: "Associate", specialty: "Advocate High Court" },
 ];
 
 const directors = [
